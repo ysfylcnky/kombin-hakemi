@@ -10,7 +10,7 @@ paths: "app/**/*.tsx, components/**, constants/theme.ts"
 `ui-ux-pro-max` skill'i genel UX kuralları ve React Native rehberi için kullanılır (`--domain ux`, `--stack react-native`). Renk, font ve tasarım dili **bu dosyadan** gelir: `--design-system` önerisi bu tokenlarla çelişirse bu dosya kazanır; `--persist` ile proje dosyası oluşturma.
 
 ## Kimlik
-Konsept: **futbol hakemi × moda podyumu.** Koyu saha yeşili zemin üstünde krem metin, vurgu olarak hakem kartı renkleri. Ciddi görünümlü ama metinler ironik. Generic "mor gradyan AI uygulaması" görüntüsünden kaçın.
+Konsept: **futbol hakemi × moda podyumu.** Koyu saha yeşili zemin üstünde krem metin, vurgu olarak hakem kartı renkleri. Ciddi görünümlü ama metinler ironik. Stil minimal ve editoryal: bol boşluk, net hiyerarşi, düz yüzeyler. Generic "mor gradyan AI uygulaması" görüntüsünden, 3D ve katmanlı gölgelerden kaçın.
 
 ## Tokenlar (`constants/theme.ts`)
 | Token | Açık | Koyu | Kullanım |
@@ -26,7 +26,10 @@ Konsept: **futbol hakemi × moda podyumu.** Koyu saha yeşili zemin üstünde kr
 | `golden` | `#C9A227` | `#E6C25A` | Altın top |
 | `border` | `#E2DDD0` | `#26372D` | Ayraç |
 
+Kontrast notu: açık modda `cardYellow` (1.6:1) ve `golden` (2.2:1) zemine karşı zayıf; bu yüzeylere `text` renginde kenar çizgisi ver. Kart renklerinin ve `golden`'ın üstündeki metin koyu modda `bg`; açık modda `cardRed` üstünde beyaz, diğerlerinde `text`.
+
 Boşluk ölçeği: `xs 4, sm 8, md 12, lg 16, xl 24, xxl 32`. Köşe: `sm 8, md 14, lg 22, pill 999`.
+Fontlar: başlık (`display`, `title`) **Playfair Display**, geri kalan her şey **Inter**; `.ttf` dosyaları `assets/fonts/`, yükleme `expo-font` ile.
 Tipografi: `display 32/38 bold`, `title 22/28 semibold`, `body 16/22`, `caption 13/18`, skor için `score 72 heavy, tabular nums`.
 
 ## Kurallar
