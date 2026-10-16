@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "kombin-hakemi",
+    "name": "Kombin Hakemi",
     "slug": "kombin-hakemi",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -28,7 +28,7 @@
       [
         "expo-splash-screen",
         {
-          "backgroundColor": "#208AEF",
+          "backgroundColor": "#0F1A14",
           "image": "./assets/images/splash-icon.png",
           "imageWidth": 76
         }
