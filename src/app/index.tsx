@@ -1,13 +1,10 @@
-import { Text, View } from 'react-native';
-
-import { useTheme } from '@/hooks/use-theme';
+import { AppText } from '@/components/app-text';
+import { Screen } from '@/components/screen';
 
 export default function HomeScreen() {
-  const { colors, typography } = useTheme();
-
   return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: colors.bg }}>
-      <Text style={[typography.display, { color: colors.text }]}>Kombin Hakemi</Text>
-    </View>
+    <Screen style={{ justifyContent: 'center', alignItems: 'center' }}>
+      <AppText variant="display">Kombin Hakemi</AppText>
+    </Screen>
   );
 }
