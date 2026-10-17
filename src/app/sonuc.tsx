@@ -6,7 +6,10 @@ import Animated, {
   Easing,
   useAnimatedProps,
   useAnimatedReaction,
+  useAnimatedStyle,
   useSharedValue,
+  withDelay,
+  withSpring,
   withTiming,
 } from 'react-native-reanimated';
 import Svg, { Circle } from 'react-native-svg';
@@ -33,6 +36,17 @@ const cardColor = {
   golden: 'golden',
 } as const;
 
+const cardLabel = {
+  red: 'Kırmızı kart',
+  yellow: 'Sarı kart',
+  green: 'Yeşil kart',
+  golden: 'Altın top',
+} as const;
+
+const countDuration = 900;
+// The card lands just after the score count settles, so the two haptics don't overlap.
+const cardDelay = countDuration + 300;
+
 const AnimatedCircle = Animated.createAnimatedComponent(Circle);
 const ringSize = 200;
 const ringStroke = 12;
@@ -52,7 +66,7 @@ function ScoreRing({ score, card }: Pick<Verdict, 'score' | 'card'>) {
           : Haptics.NotificationFeedbackType.Success,
       );
     // Reanimated jumps straight to the end when the system asks to reduce motion.
-    progress.value = withTiming(score, { duration: 900, easing: Easing.out(Easing.cubic) }, () =>
+    progress.value = withTiming(score, { duration: countDuration, easing: Easing.out(Easing.cubic) }, () =>
       scheduleOnRN(finish),
     );
   }, [progress, score, card]);
@@ -102,6 +116,46 @@ function ScoreRing({ score, card }: Pick<Verdict, 'score' | 'card'>) {
   );
 }
 
+function RefereeCard({ card }: Pick<Verdict, 'card'>) {
+  const { colors, space, radius } = useTheme();
+  const progress = useSharedValue(0);
+
+  useEffect(() => {
+    progress.value = withDelay(cardDelay, withSpring(1));
+    const id = setTimeout(
+      () => Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy),
+      cardDelay,
+    );
+    return () => clearTimeout(id);
+  }, [progress]);
+
+  const style = useAnimatedStyle(() => ({
+    opacity: Math.min(progress.value, 1),
+    transform: [
+      { translateY: (1 - progress.value) * 160 },
+      { rotate: `${(1 - progress.value) * -12}deg` },
+    ],
+  }));
+
+  const golden = card === 'golden';
+  return (
+    <Animated.View style={[{ alignItems: 'center', gap: space.sm }, style]}>
+      <View
+        style={{
+          width: golden ? 88 : 64,
+          height: 88,
+          borderRadius: golden ? radius.pill : radius.sm,
+          backgroundColor: colors[cardColor[card]],
+          // Yellow and gold are too light against the cream background on their own.
+          borderWidth: card === 'yellow' || golden ? 1 : 0,
+          borderColor: colors.text,
+        }}
+      />
+      <AppText variant="caption">{cardLabel[card]}</AppText>
+    </Animated.View>
+  );
+}
+
 export default function SonucScreen() {
   const { uri } = useLocalSearchParams<{ uri: string }>();
   const { colors, space } = useTheme();
@@ -143,6 +197,7 @@ export default function SonucScreen() {
   return (
     <Screen style={{ justifyContent: 'center', alignItems: 'center', gap: space.lg }}>
       <ScoreRing score={verdict.score} card={verdict.card} />
+      <RefereeCard card={verdict.card} />
       <AppText variant="title">{verdict.title}</AppText>
     </Screen>
   );
