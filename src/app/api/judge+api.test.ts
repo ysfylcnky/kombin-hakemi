@@ -18,10 +18,10 @@ function judge(deviceId: string, body: unknown) {
 const valid = { imageBase64: 'abc' };
 
 describe('POST /api/judge', () => {
-  it('returns a verdict whose card matches the score', async () => {
+  it('returns a verdict with the computed score and level', async () => {
     const res = await judge('ok', valid);
     expect(res.status).toBe(200);
-    expect(await res.json()).toMatchObject({ score: 6, card: 'yellow' });
+    expect(await res.json()).toMatchObject({ score: 5.5, level: 'developing' });
   });
 
   it('rejects an invalid body', async () => {

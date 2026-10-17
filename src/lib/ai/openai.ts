@@ -1,10 +1,10 @@
 import { z } from 'zod';
 
 import { systemPrompt } from '@/lib/ai/prompts';
-import { Verdict } from '@/lib/ai/schema';
+import { ModelVerdict } from '@/lib/ai/schema';
 
 // Strict structured outputs reject maxLength; zod still enforces it on the reply.
-const schema = z.toJSONSchema(Verdict, {
+const schema = z.toJSONSchema(ModelVerdict, {
   override: ({ jsonSchema }) => {
     delete jsonSchema.maxLength;
   },
@@ -47,7 +47,7 @@ export async function judgeWithOpenAI(imageBase64: string) {
   // One deadline for both attempts so the client never waits more than 25 s.
   const signal = AbortSignal.timeout(25_000);
   for (let attempt = 0; attempt < 2; attempt++) {
-    const verdict = Verdict.safeParse(await callOpenAI(imageBase64, signal));
+    const verdict = ModelVerdict.safeParse(await callOpenAI(imageBase64, signal));
     if (verdict.success) return verdict.data;
   }
   throw new Error('OpenAI returned an invalid verdict');

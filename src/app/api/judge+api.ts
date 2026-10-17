@@ -1,6 +1,6 @@
 import { judgeWithOpenAI } from '@/lib/ai/openai';
 import { mockVerdict } from '@/lib/ai/mock';
-import { cardForScore, JudgeRequest } from '@/lib/ai/schema';
+import { JudgeRequest, levelForScore, scoreCriteria } from '@/lib/ai/schema';
 
 const recentRequests = new Map<string, number[]>();
 
@@ -24,7 +24,8 @@ export async function POST(request: Request) {
       process.env.AI_MOCK === '1'
         ? await mockVerdict()
         : await judgeWithOpenAI(body.data.imageBase64);
-    return Response.json({ ...verdict, card: cardForScore(verdict.score) });
+    const score = scoreCriteria(verdict.criteria);
+    return Response.json({ ...verdict, score, level: levelForScore(score) });
   } catch (error) {
     const timedOut = error instanceof Error && error.name === 'TimeoutError';
     console.error('Judge failed:', error instanceof Error ? error.message : error);

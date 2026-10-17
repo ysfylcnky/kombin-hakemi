@@ -5,17 +5,26 @@ export const JudgeRequest = z.object({
   imageBase64: z.string().min(1).max(2 * 1024 * 1024),
 });
 
-export const Verdict = z.object({
+const observation = z.string().max(120);
+const score = z.number().int().min(0).max(10);
+// Observation comes first so the model describes what it sees before scoring it.
+const criterion = z.object({ observation, score });
+
+export const ModelVerdict = z.object({
   isOutfit: z.boolean(),
-  score: z.number().min(1).max(10).multipleOf(0.5),
-  card: z.enum(['red', 'yellow', 'green', 'golden']),
   title: z.string().max(40),
   commentary: z.string().max(400),
-  categories: z.object({
-    colorHarmony: z.number().min(0).max(10),
-    fit: z.number().min(0).max(10),
-    occasion: z.number().min(0).max(10),
-    creativity: z.number().min(0).max(10),
+  criteria: z.object({
+    colorHarmony: criterion,
+    proportion: criterion,
+    fit: criterion,
+    formality: criterion,
+    footwearAccessories: criterion,
+    focalPoint: criterion,
+    texture: criterion,
+    // Null when the outfit has no pattern, so plain outfits aren't penalised.
+    pattern: z.object({ observation, score: score.nullable() }),
+    grooming: criterion,
   }),
   pros: z.array(z.string().max(80)).max(3),
   cons: z.array(z.string().max(80)).max(3),
@@ -24,11 +33,44 @@ export const Verdict = z.object({
 });
 
 export type JudgeRequest = z.infer<typeof JudgeRequest>;
-export type Verdict = z.infer<typeof Verdict>;
+export type ModelVerdict = z.infer<typeof ModelVerdict>;
+export type Criteria = ModelVerdict['criteria'];
+export type Level = 'weak' | 'developing' | 'good' | 'veryGood' | 'flawless';
+export type Verdict = ModelVerdict & { score: number; level: Level };
 
-export function cardForScore(score: number): Verdict['card'] {
-  if (score < 4) return 'red';
-  if (score < 7) return 'yellow';
-  if (score < 9) return 'green';
-  return 'golden';
+export const weights: Record<keyof Criteria, number> = {
+  colorHarmony: 20,
+  proportion: 15,
+  fit: 15,
+  formality: 12,
+  footwearAccessories: 10,
+  focalPoint: 10,
+  texture: 8,
+  pattern: 5,
+  grooming: 5,
+};
+
+export function scoreCriteria(criteria: Criteria) {
+  let total = 0;
+  let weightSum = 0;
+  let lowest = 10;
+  for (const key of Object.keys(weights) as (keyof Criteria)[]) {
+    const { score } = criteria[key];
+    if (score === null) continue;
+    total += score * weights[key];
+    weightSum += weights[key];
+    lowest = Math.min(lowest, score);
+  }
+  const average = total / weightSum;
+  // One badly failed criterion sinks the outfit however strong the rest is.
+  const capped = lowest <= 3 ? Math.min(average, lowest + 3) : average;
+  return Math.round(capped * 10) / 10;
+}
+
+export function levelForScore(score: number): Level {
+  if (score < 4) return 'weak';
+  if (score < 6) return 'developing';
+  if (score < 7.5) return 'good';
+  if (score < 9) return 'veryGood';
+  return 'flawless';
 }

@@ -1,38 +1,63 @@
-import { cardForScore, JudgeRequest, Verdict } from '@/lib/ai/schema';
+import {
+  type Criteria,
+  JudgeRequest,
+  levelForScore,
+  ModelVerdict,
+  scoreCriteria,
+} from '@/lib/ai/schema';
 
-const verdict: Verdict = {
+function criteria(score: number, overrides: Partial<Record<keyof Criteria, number | null>> = {}) {
+  const keys: (keyof Criteria)[] = [
+    'colorHarmony',
+    'proportion',
+    'fit',
+    'formality',
+    'footwearAccessories',
+    'focalPoint',
+    'texture',
+    'pattern',
+    'grooming',
+  ];
+  return Object.fromEntries(
+    keys.map((key) => [key, { observation: 'gözlem', score: key in overrides ? overrides[key] : score }]),
+  ) as Criteria;
+}
+
+const verdict: ModelVerdict = {
   isOutfit: true,
-  score: 7.5,
-  card: 'green',
   title: 'Dengeli Smart Casual',
   commentary: 'Lacivert blazer işini biliyor.',
-  categories: { colorHarmony: 8, fit: 7, occasion: 8, creativity: 6 },
+  criteria: criteria(7),
   pros: ['Renkler uyumlu'],
   cons: ['Ayakkabı sönük'],
   suggestions: ['Beyaz sneaker dene'],
   detectedItems: ['lacivert blazer'],
 };
 
-describe('Verdict', () => {
+describe('ModelVerdict', () => {
   it('accepts a valid verdict', () => {
-    expect(Verdict.safeParse(verdict).success).toBe(true);
+    expect(ModelVerdict.safeParse(verdict).success).toBe(true);
   });
 
-  it('rejects a score that is not a half step', () => {
-    expect(Verdict.safeParse({ ...verdict, score: 7.3 }).success).toBe(false);
+  it('accepts a null pattern score', () => {
+    const withoutPattern = { ...verdict, criteria: { ...verdict.criteria, pattern: { observation: '', score: null } } };
+    expect(ModelVerdict.safeParse(withoutPattern).success).toBe(true);
   });
 
-  it('rejects a score outside 1-10', () => {
-    expect(Verdict.safeParse({ ...verdict, score: 0 }).success).toBe(false);
-    expect(Verdict.safeParse({ ...verdict, score: 10.5 }).success).toBe(false);
+  it('rejects a null score on other criteria', () => {
+    const broken = { ...verdict, criteria: { ...verdict.criteria, fit: { observation: '', score: null } } };
+    expect(ModelVerdict.safeParse(broken).success).toBe(false);
+  });
+
+  it('rejects a criterion score that is not a whole number in 0-10', () => {
+    for (const score of [6.5, -1, 11]) {
+      const broken = { ...verdict, criteria: { ...verdict.criteria, fit: { observation: '', score } } };
+      expect(ModelVerdict.safeParse(broken).success).toBe(false);
+    }
   });
 
   it('rejects more than three pros', () => {
-    expect(Verdict.safeParse({ ...verdict, pros: ['a', 'b', 'c', 'd'] }).success).toBe(false);
-  });
-
-  it('rejects an unknown card', () => {
-    expect(Verdict.safeParse({ ...verdict, card: 'blue' }).success).toBe(false);
+    expect(ModelVerdict.safeParse({ ...verdict, pros: ['a', 'b', 'c', 'd'] }).success).toBe(false);
   });
 });
 
@@ -47,17 +72,46 @@ describe('JudgeRequest', () => {
   });
 });
 
-describe('cardForScore', () => {
+describe('scoreCriteria', () => {
+  it('returns the common score when all criteria agree', () => {
+    expect(scoreCriteria(criteria(8))).toBe(8);
+  });
+
+  it('weights colour harmony more than grooming', () => {
+    expect(scoreCriteria(criteria(6, { colorHarmony: 10 }))).toBe(6.8);
+    expect(scoreCriteria(criteria(6, { grooming: 10 }))).toBe(6.2);
+  });
+
+  it('ignores a null pattern instead of counting it as zero', () => {
+    expect(scoreCriteria(criteria(8, { pattern: null }))).toBe(8);
+  });
+
+  it('caps the total at the weakest criterion plus three', () => {
+    expect(scoreCriteria(criteria(9, { grooming: 2 }))).toBe(5);
+  });
+
+  it('does not cap when the weakest criterion is above three', () => {
+    expect(scoreCriteria(criteria(9, { grooming: 4 }))).toBe(8.8);
+  });
+
+  it('rounds to one decimal', () => {
+    expect(scoreCriteria(criteria(7, { texture: 8 }))).toBe(7.1);
+  });
+});
+
+describe('levelForScore', () => {
   it.each([
-    [1, 'red'],
-    [3.5, 'red'],
-    [4, 'yellow'],
-    [6.5, 'yellow'],
-    [7, 'green'],
-    [8.5, 'green'],
-    [9, 'golden'],
-    [10, 'golden'],
-  ])('gives %s a %s card', (score, card) => {
-    expect(cardForScore(score)).toBe(card);
+    [0, 'weak'],
+    [3.9, 'weak'],
+    [4, 'developing'],
+    [5.9, 'developing'],
+    [6, 'good'],
+    [7.4, 'good'],
+    [7.5, 'veryGood'],
+    [8.9, 'veryGood'],
+    [9, 'flawless'],
+    [10, 'flawless'],
+  ])('puts %s at %s', (score, level) => {
+    expect(levelForScore(score)).toBe(level);
   });
 });

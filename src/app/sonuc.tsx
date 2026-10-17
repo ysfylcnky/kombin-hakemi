@@ -6,10 +6,7 @@ import Animated, {
   Easing,
   useAnimatedProps,
   useAnimatedReaction,
-  useAnimatedStyle,
   useSharedValue,
-  withDelay,
-  withSpring,
   withTiming,
 } from 'react-native-reanimated';
 import Svg, { Circle } from 'react-native-svg';
@@ -20,7 +17,7 @@ import { Button } from '@/components/button';
 import { Screen } from '@/components/screen';
 import { useJudgeOutfit } from '@/hooks/use-judge-outfit';
 import { useTheme } from '@/hooks/use-theme';
-import type { Verdict } from '@/lib/ai/schema';
+import type { Criteria, Verdict } from '@/lib/ai/schema';
 
 const loadingMessages = [
   "Hakem VAR'a gitti…",
@@ -30,30 +27,19 @@ const loadingMessages = [
   'Kart cebinde, karar yakın…',
 ];
 
-const cardColor = {
-  red: 'cardRed',
-  yellow: 'cardYellow',
-  green: 'cardGreen',
-  golden: 'golden',
-} as const;
-
-const cardLabel = {
-  red: 'Kırmızı kart',
-  yellow: 'Sarı kart',
-  green: 'Yeşil kart',
-  golden: 'Altın top',
-} as const;
-
-const categoryLabels = {
+const criterionLabels: Record<keyof Criteria, string> = {
   colorHarmony: 'Renk uyumu',
-  fit: 'Kalıp',
-  occasion: 'Ortama uygunluk',
-  creativity: 'Stil',
-} as const;
+  proportion: 'Oran ve siluet',
+  fit: 'Kalıp ve oturuş',
+  formality: 'Formalite tutarlılığı',
+  footwearAccessories: 'Ayakkabı ve aksesuar',
+  focalPoint: 'Odak noktası ve bütünlük',
+  texture: 'Doku ve kumaş',
+  pattern: 'Desen kullanımı',
+  grooming: 'Bakım ve özen',
+};
 
 const countDuration = 900;
-// The card lands just after the score count settles, so the two haptics don't overlap.
-const cardDelay = countDuration + 300;
 
 const AnimatedCircle = Animated.createAnimatedComponent(Circle);
 const ringSize = 200;
@@ -61,7 +47,7 @@ const ringStroke = 12;
 const ringRadius = (ringSize - ringStroke) / 2;
 const ringLength = 2 * Math.PI * ringRadius;
 
-function ScoreRing({ score, card }: Pick<Verdict, 'score' | 'card'>) {
+function ScoreRing({ score, level }: Pick<Verdict, 'score' | 'level'>) {
   const { colors } = useTheme();
   const progress = useSharedValue(0);
   const [shown, setShown] = useState(0);
@@ -69,7 +55,7 @@ function ScoreRing({ score, card }: Pick<Verdict, 'score' | 'card'>) {
   useEffect(() => {
     const finish = () =>
       Haptics.notificationAsync(
-        card === 'red'
+        level === 'weak'
           ? Haptics.NotificationFeedbackType.Error
           : Haptics.NotificationFeedbackType.Success,
       );
@@ -79,10 +65,10 @@ function ScoreRing({ score, card }: Pick<Verdict, 'score' | 'card'>) {
       { duration: countDuration, easing: Easing.out(Easing.cubic) },
       () => scheduleOnRN(finish),
     );
-  }, [progress, score, card]);
+  }, [progress, score, level]);
 
   useAnimatedReaction(
-    () => Math.round(progress.value * 2) / 2,
+    () => Math.round(progress.value * 10) / 10,
     (value, previous) => {
       if (value !== previous) scheduleOnRN(setShown, value);
     },
@@ -113,7 +99,7 @@ function ScoreRing({ score, card }: Pick<Verdict, 'score' | 'card'>) {
           cx={ringSize / 2}
           cy={ringSize / 2}
           r={ringRadius}
-          stroke={colors[cardColor[card]]}
+          stroke={colors.primary}
           strokeWidth={ringStroke}
           strokeLinecap="round"
           strokeDasharray={ringLength}
@@ -123,43 +109,6 @@ function ScoreRing({ score, card }: Pick<Verdict, 'score' | 'card'>) {
       </Svg>
       <AppText variant="score">{shown}</AppText>
     </View>
-  );
-}
-
-function RefereeCard({ card }: Pick<Verdict, 'card'>) {
-  const { colors, space, radius } = useTheme();
-  const progress = useSharedValue(0);
-
-  useEffect(() => {
-    progress.value = withDelay(cardDelay, withSpring(1));
-    const id = setTimeout(() => Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy), cardDelay);
-    return () => clearTimeout(id);
-  }, [progress]);
-
-  const style = useAnimatedStyle(() => ({
-    opacity: Math.min(progress.value, 1),
-    transform: [
-      { translateY: (1 - progress.value) * 160 },
-      { rotate: `${(1 - progress.value) * -12}deg` },
-    ],
-  }));
-
-  const golden = card === 'golden';
-  return (
-    <Animated.View style={[{ alignItems: 'center', gap: space.sm }, style]}>
-      <View
-        style={{
-          width: golden ? 88 : 64,
-          height: 88,
-          borderRadius: golden ? radius.pill : radius.sm,
-          backgroundColor: colors[cardColor[card]],
-          // Yellow and gold are too light against the cream background on their own.
-          borderWidth: card === 'yellow' || golden ? 1 : 0,
-          borderColor: colors.text,
-        }}
-      />
-      <AppText variant="caption">{cardLabel[card]}</AppText>
-    </Animated.View>
   );
 }
 
@@ -241,31 +190,24 @@ export default function SonucScreen() {
   return (
     <Screen style={{ paddingBottom: 0 }}>
       <ScrollView contentContainerStyle={{ gap: space.xl, paddingBottom: space.xl }}>
-        <View
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'center',
-            gap: space.xl,
-          }}>
-          <ScoreRing score={verdict.score} card={verdict.card} />
-          <RefereeCard card={verdict.card} />
+        <View style={{ alignItems: 'center' }}>
+          <ScoreRing score={verdict.score} level={verdict.level} />
         </View>
         <View style={{ gap: space.sm }}>
           <AppText variant="display">{verdict.title}</AppText>
           <AppText>{verdict.commentary}</AppText>
         </View>
         <View style={{ gap: space.md }}>
-          <AppText variant="title">Kategoriler</AppText>
-          {(Object.keys(categoryLabels) as (keyof typeof categoryLabels)[]).map((key) => (
+          <AppText variant="title">Kriterler</AppText>
+          {(Object.keys(criterionLabels) as (keyof Criteria)[]).map((key) => (
             <View
               key={key}
               accessible
-              accessibilityLabel={`${categoryLabels[key]}, 10 üzerinden ${verdict.categories[key]}`}
+              accessibilityLabel={`${criterionLabels[key]}, 10 üzerinden ${verdict.criteria[key].score ?? 'puansız'}`}
               style={{ gap: space.xs }}>
               <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                <AppText>{categoryLabels[key]}</AppText>
-                <AppText>{verdict.categories[key]}</AppText>
+                <AppText>{criterionLabels[key]}</AppText>
+                <AppText>{verdict.criteria[key].score ?? '—'}</AppText>
               </View>
               <View
                 style={{
@@ -275,7 +217,7 @@ export default function SonucScreen() {
                 }}>
                 <View
                   style={{
-                    width: `${verdict.categories[key] * 10}%`,
+                    width: `${(verdict.criteria[key].score ?? 0) * 10}%`,
                     height: '100%',
                     borderRadius: radius.pill,
                     backgroundColor: colors.primary,
