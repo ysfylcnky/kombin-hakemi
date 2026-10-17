@@ -1,7 +1,7 @@
 # Sprint durumu
 
-Aktif: S04 (görevler bitti, kapanış bekliyor) · Sonraki: S05 · Son güncelleme: 2026-10-17
-Aktif sprint başlangıç commit'i: 5de1b37
+Aktif: yok · Sonraki: S05 · Son güncelleme: 2026-10-17
+Aktif sprint başlangıç commit'i: -
 
 ## Taşınan işler
 -
@@ -13,9 +13,10 @@ Aktif sprint başlangıç commit'i: 5de1b37
 - Kamera üstü katman temadan bağımsız `colors.dark` kullanır (önizleme hep koyu).
 - Görsel istemcide `prepareImage` ile 1024px JPEG'e küçültülüp base64 gönderilir.
 - AI sağlayıcı OpenAI Responses API (`gpt-6-luna`, strict JSON Schema); `OPENAI_API_KEY` yalnızca sunucuda, `AI_MOCK=1` anahtarsız.
-- Tek hakem: ciddi ve sert stil danışmanı; persona/sertlik seçimi yok; detaylı rapor sayfası S04'te.
+- Tek hakem: ciddi ve sert stil danışmanı; persona/sertlik seçimi yok.
 - İstek ve AI yanıtı `lib/ai/schema.ts` zod şemalarıyla doğrulanır; kart sunucuda puandan hesaplanır.
+- Sonuç ekranı `sonuc.tsx` (param `uri`) isteği kendisi atar; halka `react-native-svg`, hareketi azalt Reanimated varsayılanıyla.
 
 ## Son sprintler
+- S04: sonuç ekranı, puan halkası, hakem kartı, stil raporu, hata/tekrar dene · etiket sprint-04
 - S03: /api/judge, OpenAI görsel karar, zod şema, mock, rate limit, istemci hook'u · etiket sprint-03
-- S02: kamera, izin akışı, galeri, önizleme, görsel sıkıştırma, zamanlayıcı · etiket sprint-02
