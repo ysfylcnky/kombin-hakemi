@@ -1,17 +1,14 @@
 import { Image } from 'expo-image';
 import { router, useLocalSearchParams } from 'expo-router';
-import { ActivityIndicator, Alert } from 'react-native';
 
 import { AppText } from '@/components/app-text';
 import { Button } from '@/components/button';
 import { Screen } from '@/components/screen';
-import { useJudgeOutfit } from '@/hooks/use-judge-outfit';
 import { useTheme } from '@/hooks/use-theme';
 
 export default function OnizlemeScreen() {
   const { uri } = useLocalSearchParams<{ uri?: string }>();
-  const { colors, space } = useTheme();
-  const { judge, loading, error } = useJudgeOutfit();
+  const { space } = useTheme();
 
   if (!uri) {
     return (
@@ -23,16 +20,6 @@ export default function OnizlemeScreen() {
     );
   }
 
-  const send = async () => {
-    // The alert stands in for the S04 report screen.
-    const verdict = await judge(uri);
-    if (!verdict) return;
-    Alert.alert(
-      verdict.isOutfit ? `${verdict.score} · ${verdict.title}` : 'Kombin bulunamadı',
-      verdict.commentary,
-    );
-  };
-
   return (
     <Screen style={{ gap: space.lg }}>
       <Image
@@ -41,12 +28,10 @@ export default function OnizlemeScreen() {
         style={{ flex: 1 }}
         accessibilityLabel="Kombin fotoğrafın"
       />
-      {error && <AppText muted>{error}</AppText>}
-      {loading ? (
-        <ActivityIndicator color={colors.primary} accessibilityLabel="Hakem düşünüyor" />
-      ) : (
-        <Button label="Hakeme gönder" onPress={send} />
-      )}
+      <Button
+        label="Hakeme gönder"
+        onPress={() => router.push({ pathname: '/sonuc', params: { uri } })}
+      />
       <Button label="Tekrar çek" variant="ghost" onPress={() => router.back()} />
     </Screen>
   );
