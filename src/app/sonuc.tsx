@@ -178,7 +178,7 @@ function ListSection({
     <View style={{ gap: space.sm }}>
       <AppText variant="title">{title}</AppText>
       {items.map((item, i) => (
-        <AppText key={item}>
+        <AppText key={i}>
           {marker ?? `${i + 1}.`} {item}
         </AppText>
       ))}
@@ -292,9 +292,9 @@ export default function SonucScreen() {
           <View style={{ gap: space.sm }}>
             <AppText variant="title">Görülen parçalar</AppText>
             <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: space.sm }}>
-              {verdict.detectedItems.map((item) => (
+              {verdict.detectedItems.map((item, i) => (
                 <AppText
-                  key={item}
+                  key={i}
                   variant="caption"
                   style={{
                     paddingHorizontal: space.md,
