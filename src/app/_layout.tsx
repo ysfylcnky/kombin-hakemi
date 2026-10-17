@@ -11,6 +11,7 @@ import { migrateDb } from '@/lib/db/outfits';
 import { syncReminders } from '@/lib/reminder';
 
 SplashScreen.preventAutoHideAsync();
+// Missing on react-native-web, which renders this layout during the API's web export.
 Appearance.setColorScheme?.((Storage.getItemSync('theme') ?? 'unspecified') as ColorSchemeName);
 
 export default function RootLayout() {
