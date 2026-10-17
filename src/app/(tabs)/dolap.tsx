@@ -56,6 +56,8 @@ export default function DolapScreen() {
         data={shown}
         keyExtractor={(o) => String(o.id)}
         numColumns={2}
+        // The default window (21 screens) keeps too many full-size photos decoded.
+        windowSize={5}
         columnWrapperStyle={{ gap: space.md }}
         contentContainerStyle={{ gap: space.md, paddingBottom: space.xl }}
         ListHeaderComponent={
