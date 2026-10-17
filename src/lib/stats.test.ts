@@ -28,11 +28,11 @@ describe('summarize', () => {
 
   it('finds average, best and worst', () => {
     const result = summarize([outfit(1, 6), outfit(2, 8.5), outfit(3, 4.2)]);
-    expect(result).toMatchObject({ average: 6.2, best: { id: 2 }, worst: { id: 3 } });
+    expect(result).toEqual({ average: 6.2, best: 8.5, worst: 4.2 });
   });
 
   it('uses the single outfit as both best and worst', () => {
-    expect(summarize([outfit(1, 7)])).toMatchObject({ average: 7, best: { id: 1 }, worst: { id: 1 } });
+    expect(summarize([outfit(1, 7)])).toEqual({ average: 7, best: 7, worst: 7 });
   });
 });
 

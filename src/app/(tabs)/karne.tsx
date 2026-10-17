@@ -103,8 +103,8 @@ export default function KarneScreen() {
   const areas = strongestAndWeakest(outfits)!;
   const tiles = [
     { label: 'Ortalama', value: summary.average },
-    { label: 'En iyi', value: summary.best.verdict.score },
-    { label: 'En düşük', value: summary.worst.verdict.score },
+    { label: 'En iyi', value: summary.best },
+    { label: 'En düşük', value: summary.worst },
   ];
 
   return (

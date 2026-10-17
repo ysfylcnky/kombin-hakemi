@@ -8,8 +8,8 @@ const mean = (values: number[]) =>
 
 export function summarize(outfits: Outfit[]) {
   if (outfits.length === 0) return null;
-  const byScore = [...outfits].sort((a, b) => b.verdict.score - a.verdict.score);
-  return { average: mean(outfits.map((o) => o.verdict.score)), best: byScore[0], worst: byScore.at(-1)! };
+  const scores = outfits.map((o) => o.verdict.score);
+  return { average: mean(scores), best: Math.max(...scores), worst: Math.min(...scores) };
 }
 
 // Calendar arithmetic rather than fixed 7-day offsets, so DST shifts don't move week boundaries.
