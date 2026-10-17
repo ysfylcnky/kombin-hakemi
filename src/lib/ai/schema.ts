@@ -46,7 +46,7 @@ export const occasionLabels: Record<JudgeRequest['occasion'], string> = {
   sport: 'Spor',
 };
 
-export const weights: Record<keyof Criteria, number> = {
+const weights: Record<keyof Criteria, number> = {
   colorHarmony: 20,
   proportion: 15,
   fit: 15,
