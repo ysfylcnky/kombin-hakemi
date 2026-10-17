@@ -1,7 +1,7 @@
 import * as Haptics from 'expo-haptics';
-import { useLocalSearchParams } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 import { useEffect, useState } from 'react';
-import { ActivityIndicator, View } from 'react-native';
+import { ActivityIndicator, ScrollView, View } from 'react-native';
 import Animated, {
   Easing,
   useAnimatedProps,
@@ -16,6 +16,7 @@ import Svg, { Circle } from 'react-native-svg';
 import { scheduleOnRN } from 'react-native-worklets';
 
 import { AppText } from '@/components/app-text';
+import { Button } from '@/components/button';
 import { Screen } from '@/components/screen';
 import { useJudgeOutfit } from '@/hooks/use-judge-outfit';
 import { useTheme } from '@/hooks/use-theme';
@@ -43,6 +44,13 @@ const cardLabel = {
   golden: 'Altın top',
 } as const;
 
+const categoryLabels = {
+  colorHarmony: 'Renk uyumu',
+  fit: 'Kalıp',
+  occasion: 'Ortama uygunluk',
+  creativity: 'Stil',
+} as const;
+
 const countDuration = 900;
 // The card lands just after the score count settles, so the two haptics don't overlap.
 const cardDelay = countDuration + 300;
@@ -66,8 +74,10 @@ function ScoreRing({ score, card }: Pick<Verdict, 'score' | 'card'>) {
           : Haptics.NotificationFeedbackType.Success,
       );
     // Reanimated jumps straight to the end when the system asks to reduce motion.
-    progress.value = withTiming(score, { duration: countDuration, easing: Easing.out(Easing.cubic) }, () =>
-      scheduleOnRN(finish),
+    progress.value = withTiming(
+      score,
+      { duration: countDuration, easing: Easing.out(Easing.cubic) },
+      () => scheduleOnRN(finish),
     );
   }, [progress, score, card]);
 
@@ -122,10 +132,7 @@ function RefereeCard({ card }: Pick<Verdict, 'card'>) {
 
   useEffect(() => {
     progress.value = withDelay(cardDelay, withSpring(1));
-    const id = setTimeout(
-      () => Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy),
-      cardDelay,
-    );
+    const id = setTimeout(() => Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy), cardDelay);
     return () => clearTimeout(id);
   }, [progress]);
 
@@ -156,9 +163,32 @@ function RefereeCard({ card }: Pick<Verdict, 'card'>) {
   );
 }
 
+function ListSection({
+  title,
+  items,
+  marker,
+}: {
+  title: string;
+  items: string[];
+  marker?: string;
+}) {
+  const { space } = useTheme();
+  if (items.length === 0) return null;
+  return (
+    <View style={{ gap: space.sm }}>
+      <AppText variant="title">{title}</AppText>
+      {items.map((item, i) => (
+        <AppText key={item}>
+          {marker ?? `${i + 1}.`} {item}
+        </AppText>
+      ))}
+    </View>
+  );
+}
+
 export default function SonucScreen() {
   const { uri } = useLocalSearchParams<{ uri: string }>();
-  const { colors, space } = useTheme();
+  const { colors, space, radius } = useTheme();
   const { judge, loading, error } = useJudgeOutfit();
   const [verdict, setVerdict] = useState<Verdict>();
   const [messageIndex, setMessageIndex] = useState(0);
@@ -195,10 +225,78 @@ export default function SonucScreen() {
   }
 
   return (
-    <Screen style={{ justifyContent: 'center', alignItems: 'center', gap: space.lg }}>
-      <ScoreRing score={verdict.score} card={verdict.card} />
-      <RefereeCard card={verdict.card} />
-      <AppText variant="title">{verdict.title}</AppText>
+    <Screen style={{ paddingBottom: 0 }}>
+      <ScrollView contentContainerStyle={{ gap: space.xl, paddingBottom: space.xl }}>
+        <View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: space.xl,
+          }}>
+          <ScoreRing score={verdict.score} card={verdict.card} />
+          <RefereeCard card={verdict.card} />
+        </View>
+        <View style={{ gap: space.sm }}>
+          <AppText variant="display">{verdict.title}</AppText>
+          <AppText>{verdict.commentary}</AppText>
+        </View>
+        <View style={{ gap: space.md }}>
+          <AppText variant="title">Kategoriler</AppText>
+          {(Object.keys(categoryLabels) as (keyof typeof categoryLabels)[]).map((key) => (
+            <View
+              key={key}
+              accessible
+              accessibilityLabel={`${categoryLabels[key]}, 10 üzerinden ${verdict.categories[key]}`}
+              style={{ gap: space.xs }}>
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                <AppText>{categoryLabels[key]}</AppText>
+                <AppText>{verdict.categories[key]}</AppText>
+              </View>
+              <View
+                style={{
+                  height: space.sm,
+                  borderRadius: radius.pill,
+                  backgroundColor: colors.border,
+                }}>
+                <View
+                  style={{
+                    width: `${verdict.categories[key] * 10}%`,
+                    height: '100%',
+                    borderRadius: radius.pill,
+                    backgroundColor: colors.primary,
+                  }}
+                />
+              </View>
+            </View>
+          ))}
+        </View>
+        <ListSection title="Artılar" items={verdict.pros} marker="+" />
+        <ListSection title="Eksikler" items={verdict.cons} marker="−" />
+        <ListSection title="Öneriler" items={verdict.suggestions} />
+        {verdict.detectedItems.length > 0 && (
+          <View style={{ gap: space.sm }}>
+            <AppText variant="title">Görülen parçalar</AppText>
+            <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: space.sm }}>
+              {verdict.detectedItems.map((item) => (
+                <AppText
+                  key={item}
+                  variant="caption"
+                  style={{
+                    paddingHorizontal: space.md,
+                    paddingVertical: space.xs,
+                    borderRadius: radius.pill,
+                    borderWidth: 1,
+                    borderColor: colors.border,
+                  }}>
+                  {item}
+                </AppText>
+              ))}
+            </View>
+          </View>
+        )}
+        <Button label="Yeni kombin" onPress={() => router.dismissTo('/')} />
+      </ScrollView>
     </Screen>
   );
 }
