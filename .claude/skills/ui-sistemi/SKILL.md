@@ -1,6 +1,6 @@
 ---
 name: ui-sistemi
-description: Kombin Hakemi'nin tasarım sistemi - renk/boşluk/tipografi tokenları, temel bileşenler, animasyon, haptik ve erişilebilirlik kuralları. Ekran veya bileşen yazarken, stil değiştirirken kullan.
+description: Prova'nın tasarım sistemi - renk/boşluk/tipografi tokenları, temel bileşenler, animasyon, haptik ve erişilebilirlik kuralları. Ekran veya bileşen yazarken, stil değiştirirken kullan.
 paths: "app/**/*.tsx, components/**, constants/theme.ts"
 ---
 
@@ -10,23 +10,24 @@ paths: "app/**/*.tsx, components/**, constants/theme.ts"
 `ui-ux-pro-max` skill'i genel UX kuralları ve React Native rehberi için kullanılır (`--domain ux`, `--stack react-native`). Renk, font ve tasarım dili **bu dosyadan** gelir: `--design-system` önerisi bu tokenlarla çelişirse bu dosya kazanır; `--persist` ile proje dosyası oluşturma.
 
 ## Kimlik
-Konsept: **futbol hakemi × moda podyumu.** Koyu saha yeşili zemin üstünde krem metin, vurgu olarak hakem kartı renkleri. Ciddi görünümlü ama metinler ironik. Stil minimal ve editoryal: bol boşluk, net hiyerarşi, düz yüzeyler. Generic "mor gradyan AI uygulaması" görüntüsünden, 3D ve katmanlı gölgelerden kaçın.
+Konsept: **editoryal moda dergisi.** Fildişi zemin, mürekkep metin, tek vurgu rengi bordo; koyu temada mürekkep-mor zemin üstünde fildişi metin. Ciddi, sakin ve kendinden emin; futbol, hakem ve oyun çağrışımı yok. Stil minimal: bol boşluk, net hiyerarşi, düz yüzeyler, serif başlıklar. Generic "mor gradyan AI uygulaması" görüntüsünden, 3D ve katmanlı gölgelerden kaçın. Seviye renkleri yalnızca puan halkası ve seviye etiketinde kullanılır.
 
 ## Tokenlar (`constants/theme.ts`)
 | Token | Açık | Koyu | Kullanım |
 |---|---|---|---|
-| `bg` | `#F6F3EA` | `#0F1A14` | Ekran zemini |
-| `surface` | `#FFFFFF` | `#18261E` | Kart |
-| `text` | `#14201A` | `#F3EEDF` | Ana metin |
-| `textMuted` | `#5B6B62` | `#A7B3AA` | İkincil |
-| `primary` | `#1F7A4D` | `#3DBE7E` | Ana buton |
-| `cardRed` | `#D7263D` | `#FF4D5E` | Kırmızı kart |
-| `cardYellow` | `#F2B705` | `#FFD23F` | Sarı kart |
-| `cardGreen` | `#2E9E5B` | `#4CD683` | Yeşil kart |
-| `golden` | `#C9A227` | `#E6C25A` | Altın top |
-| `border` | `#E2DDD0` | `#26372D` | Ayraç |
+| `bg` | `#F7F3EC` fildişi | `#17131A` | Ekran zemini |
+| `surface` | `#FFFDF9` | `#221C25` | Kart |
+| `text` | `#1E1A1D` mürekkep | `#F4EEE6` | Ana metin |
+| `textMuted` | `#6A615E` | `#ACA39C` | İkincil |
+| `primary` | `#7A1F35` bordo | `#D88A9B` | Ana buton, seçili çip |
+| `border` | `#E4DCD2` | `#352C35` | Ayraç |
+| `levelWeak` | `#A8432A` kiremit | `#E58066` | Zayıf |
+| `levelDeveloping` | `#8A6510` hardal | `#DDB04F` | Geliştirilmeli |
+| `levelGood` | `#5A6A28` zeytin | `#AFBD6E` | İyi |
+| `levelVeryGood` | `#8C2B44` bordo | `#E08EA0` | Çok iyi |
+| `levelFlawless` | `#5E1426` koyu bordo | `#F2B8C4` | Kusursuz |
 
-Kontrast notu: açık modda `cardYellow` (1.6:1) ve `golden` (2.2:1) zemine karşı zayıf; bu yüzeylere `text` renginde kenar çizgisi ver. Kart renklerinin ve `golden`'ın üstündeki metin koyu modda `bg`; açık modda `cardRed` üstünde beyaz, diğerlerinde `text`.
+Kontrast: tüm metin ve seviye renkleri iki temada `bg` ve `surface`'e karşı ≥ 4.5:1 (en düşük: açıkta `levelDeveloping` 4.8:1). `primary` üstündeki metin `bg` rengindedir (açık 9.2:1, koyu 7.0:1). `border` dekoratiftir, metin taşımaz.
 
 Boşluk ölçeği: `xs 4, sm 8, md 12, lg 16, xl 24, xxl 32`. Köşe: `sm 8, md 14, lg 22, pill 999`.
 Fontlar: başlık (`display`, `title`) **Playfair Display**, geri kalan her şey **Inter**; `.ttf` dosyaları `assets/fonts/`, yükleme `expo-font` ile.
@@ -37,18 +38,17 @@ Tipografi: `display 32/38 bold`, `title 22/28 semibold`, `body 16/22`, `caption 
 - Ekran kökü `<Screen>` (SafeArea + zemin + padding). Metin `<AppText variant=…>`.
 - Dokunma hedefi ≥ 44×44; tüm `Pressable`'larda `accessibilityRole` ve Türkçe `accessibilityLabel`.
 - Kontrast ≥ 4.5:1 (büyük metin 3:1). Yazı boyutu ölçeklemesi kapatılmaz.
-- Her veri ekranının 3 durumu: `Loading` (iskelet veya eğlenceli mesaj), `Empty` (ironik metin + eylem), `Error` (anlaşılır metin + Tekrar dene).
+- Her veri ekranının 3 durumu: `Loading` (iskelet veya kısa durum mesajı), `Empty` (net metin + eylem), `Error` (anlaşılır metin + Tekrar dene).
 - Listeler `FlatList`, görseller `expo-image` (`contentFit="cover"`, `transition`).
 
 ## Hareket ve his
 | Olay | Animasyon | Haptik |
 |---|---|---|
 | Deklanşör | 120ms beyaz flaş | `impactAsync(Medium)` |
-| Puan açılışı | 0'dan puana sayaç, 900ms ease-out | Bitişte `notificationAsync(Success)`; kırmızıda `Error` |
-| Kart çıkışı | Aşağıdan yukarı + hafif dönme (spring) | `impactAsync(Heavy)` |
+| Puan açılışı | 0'dan puana sayaç, 900ms ease-out | Bitişte `notificationAsync(Success)`; Zayıf seviyede `Error` |
 | Favori | Ölçek 1 → 1.2 → 1 | `selectionAsync()` |
 
 Animasyonlar `react-native-reanimated` ile; `useReducedMotion()` true ise animasyon yerine anında son durum.
 
 ## Metin tonu
-Kısa, esprili, kimseyi kırmayan. Örnek boş durum: "Dolabın bomboş. Hakem bekliyor, sen nerdesin?"
+Ciddi, net ve saygılı; bir stil editörünün sesi. Espri, ironi, futbol ve hakem dili yok. Kısa cümle, somut ifade, tek eylem. Örnek boş durum: "Dolabın henüz boş. İlk kombinini değerlendir, burada saklansın."
