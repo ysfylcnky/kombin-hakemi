@@ -1,13 +1,12 @@
 # Sprint durumu
 
-Aktif: S09 (görevler bitti, kapanış bekliyor) · Son güncelleme: 2026-10-17
-Aktif sprint başlangıç commit'i: 3083b96
+Aktif: yok · Sonraki: yok (9 sprintlik plan tamamlandı, v1.0.0) · Son güncelleme: 2026-10-17
+Aktif sprint başlangıç commit'i: -
 
 ## Taşınan işler
 -
 
 ## Kalıcı kararlar
-- Kamera üstü katman temadan bağımsız `colors.dark` kullanır (önizleme hep koyu).
 - Görsel istemcide `prepareImage` ile 1024px JPEG'e küçültülüp base64 gönderilir.
 - AI sağlayıcı OpenAI Responses API (`gpt-6-luna`, strict JSON Schema); `OPENAI_API_KEY` yalnızca sunucuda, `AI_MOCK=1` anahtarsız.
 - Ürün adı **Prova**; futbol/hakem metaforu ve ironi yok. Slug, scheme ve kod içi `judge` adları kalır.
@@ -20,6 +19,5 @@ Aktif sprint başlangıç commit'i: 3083b96
 - API canlıda `https://prova.expo.app` (EAS Hosting, `@ysfylcnky1/kombin-hakemi`); deploy: `npx expo export -p web` + `npx eas-cli deploy --prod --environment production` (kullanıcı terminalinden). Expo Go dev sunucusunu kullanır, `origin` yalnızca production derlemede.
 
 ## Son sprintler
+- S09: yayın ve demo; test planı, API canlıda (EAS Hosting), README, demo akışı, v1.0.0 · etiket sprint-09
 - S08–S09 arası: ana sayfa yeniden tasarımı; son prova kartı, çekim ipuçları, butonlar altta · sprint dışı
-- S08: cila; erişilebilirlik, çevrimdışı uyarı, günlük hatırlatma, Prova ikonu/splash, dolap performansı, onboarding · etiket sprint-08
-- S07: karne; istatistik, haftalık bar grafik, rozetler, görsel stil raporu paylaşımı, tema ve veri temizleme ayarları · etiket sprint-07
