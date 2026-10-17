@@ -1,13 +1,12 @@
 # Sprint durumu
 
-Aktif: S08 (görevler bitti, kapanış bekliyor) · Son güncelleme: 2026-10-17
-Aktif sprint başlangıç commit'i: 12dd7ad
+Aktif: yok · Sonraki: S09 · Son güncelleme: 2026-10-17
+Aktif sprint başlangıç commit'i: -
 
 ## Taşınan işler
 -
 
 ## Kalıcı kararlar
-- Hedef yalnızca iPhone + Android (Expo Go); web'e özel kod yazılmaz.
 - Kamera üstü katman temadan bağımsız `colors.dark` kullanır (önizleme hep koyu).
 - Görsel istemcide `prepareImage` ile 1024px JPEG'e küçültülüp base64 gönderilir.
 - AI sağlayıcı OpenAI Responses API (`gpt-6-luna`, strict JSON Schema); `OPENAI_API_KEY` yalnızca sunucuda, `AI_MOCK=1` anahtarsız.
@@ -17,7 +16,8 @@ Aktif sprint başlangıç commit'i: 12dd7ad
 - Sonuç ekranı `sonuc.tsx` (param `uri`, `occasion`) isteği kendisi atar; halka `react-native-svg`, hareketi azalt Reanimated varsayılanıyla.
 - Dolap `expo-sqlite` `prova.db` / `outfits` (karar JSON + score/level sütunu, `user_version` migration); fotoğraf `Paths.document/outfits`, DB'de yalnızca dosya adı.
 - Tema tercihi `Appearance.setColorScheme` ile uygulanır, `expo-sqlite/kv-store` `theme` anahtarında saklanır; `useTheme` değişmez.
+- kv-store anahtarları: `reminder` (on/off, 7 günlük tek seferlik 19:00 bildirimleri `syncReminders` kurar), `onboarded` (ilk açılış tanıtımı).
 
 ## Son sprintler
+- S08: cila; erişilebilirlik, çevrimdışı uyarı, günlük hatırlatma, Prova ikonu/splash, dolap performansı, onboarding · etiket sprint-08
 - S07: karne; istatistik, haftalık bar grafik, rozetler, görsel stil raporu paylaşımı, tema ve veri temizleme ayarları · etiket sprint-07
-- S06: dolap; SQLite kayıt, kalıcı fotoğraf, filtreli grid, detay, favori, onaylı silme · etiket sprint-06
