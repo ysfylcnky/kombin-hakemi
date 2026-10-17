@@ -9,6 +9,7 @@ import { Button } from '@/components/button';
 import { Screen } from '@/components/screen';
 import { useTheme } from '@/hooks/use-theme';
 import { criterionLabels } from '@/lib/ai/schema';
+import { badges } from '@/lib/badges';
 import { listOutfits, type Outfit } from '@/lib/db/outfits';
 import { strongestAndWeakest, summarize, weeklyAverages } from '@/lib/stats';
 
@@ -142,6 +143,26 @@ export default function KarneScreen() {
               <AppText muted>{label}</AppText>
               <AppText>
                 {criterionLabels[area.key]} · {area.average}
+              </AppText>
+            </View>
+          ))}
+        </View>
+        <View style={{ gap: space.md }}>
+          <AppText variant="title">Rozetler</AppText>
+          {badges(outfits).map(({ label, description, earned }) => (
+            <View
+              key={label}
+              accessible
+              accessibilityLabel={`${label} rozeti, ${earned ? 'kazanıldı' : 'henüz kazanılmadı'}. ${description}`}
+              style={{ flexDirection: 'row', alignItems: 'center', gap: space.md }}>
+              <View style={{ flex: 1, gap: space.xs }}>
+                <AppText muted={!earned}>{label}</AppText>
+                <AppText variant="caption" muted>
+                  {description}
+                </AppText>
+              </View>
+              <AppText variant="caption" style={{ color: earned ? colors.primary : colors.textMuted }}>
+                {earned ? 'Kazanıldı' : 'Kilitli'}
               </AppText>
             </View>
           ))}
