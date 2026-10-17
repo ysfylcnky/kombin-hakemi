@@ -5,7 +5,7 @@ const deviceId = Math.random().toString(36).slice(2);
 
 const errorMessages: Record<number, string> = {
   400: 'Fotoğraf okunamadı, tekrar dene.',
-  429: 'Hakem nefesleniyor, biraz bekle.',
+  429: 'Çok sık istek gönderdin, bir dakika sonra tekrar dene.',
 };
 
 export async function judgeOutfit(request: JudgeRequest): Promise<Verdict> {
@@ -16,6 +16,6 @@ export async function judgeOutfit(request: JudgeRequest): Promise<Verdict> {
   }).catch(() => {
     throw new Error('Bağlantı kurulamadı, internetini kontrol et.');
   });
-  if (!res.ok) throw new Error(errorMessages[res.status] ?? "Hakem VAR'da takıldı.");
+  if (!res.ok) throw new Error(errorMessages[res.status] ?? 'Değerlendirme şu an yapılamadı, tekrar dene.');
   return res.json();
 }

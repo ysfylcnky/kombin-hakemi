@@ -13,8 +13,8 @@ export default function TabsLayout() {
       iconColor={{ default: colors.textMuted, selected: colors.primary }}
       labelStyle={{ default: { color: colors.textMuted }, selected: { color: colors.primary } }}>
       <NativeTabs.Trigger name="index">
-        <NativeTabs.Trigger.Label>Hakem</NativeTabs.Trigger.Label>
-        <NativeTabs.Trigger.Icon sf="sportscourt" md="sports" />
+        <NativeTabs.Trigger.Label>Prova</NativeTabs.Trigger.Label>
+        <NativeTabs.Trigger.Icon sf="camera.viewfinder" md="photo_camera" />
       </NativeTabs.Trigger>
       <NativeTabs.Trigger name="dolap">
         <NativeTabs.Trigger.Label>Dolap</NativeTabs.Trigger.Label>

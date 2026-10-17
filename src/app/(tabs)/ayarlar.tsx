@@ -5,7 +5,7 @@ export default function AyarlarScreen() {
   return (
     <Screen>
       <AppText variant="display">Ayarlar</AppText>
-      <AppText muted>Ayarlar soyunma odasında hazırlanıyor.</AppText>
+      <AppText muted>Ayarlar yakında burada.</AppText>
     </Screen>
   );
 }

@@ -5,7 +5,7 @@ export default function KarneScreen() {
   return (
     <Screen>
       <AppText variant="display">Karne</AppText>
-      <AppText muted>Karne boş. Önce maça çıkman lazım.</AppText>
+      <AppText muted>Karnen henüz boş. Birkaç değerlendirmeden sonra gelişimin burada görünür.</AppText>
     </Screen>
   );
 }

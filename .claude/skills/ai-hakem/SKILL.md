@@ -57,7 +57,7 @@ type Verdict = ModelVerdict & { score: number; level: Level };  // API yanıtı
 ## OpenAI çağrısı
 - `POST https://api.openai.com/v1/responses`, başlıklar: `authorization: Bearer …`, `content-type: application/json`.
 - Sistem prompt'u `instructions`'ta; görsel `{ type: 'input_image', image_url: 'data:image/jpeg;base64,…' }`.
-- Yapısal çıktı: `text.format = { type: 'json_schema', name: 'hakem_karari', schema, strict: true }`. Şema `z.toJSONSchema(ModelVerdict)`'ten üretilir; strict mod `maxLength` desteklemediği için o alan silinir, uzunluğu zod denetler. `output_text` zod ile doğrulanır; geçmezse bir kez tekrar denenir, yine geçmezse `502`.
+- Yapısal çıktı: `text.format = { type: 'json_schema', name: 'stil_raporu', schema, strict: true }`. Şema `z.toJSONSchema(ModelVerdict)`'ten üretilir; strict mod `maxLength` desteklemediği için o alan silinir, uzunluğu zod denetler. `output_text` zod ile doğrulanır; geçmezse bir kez tekrar denenir, yine geçmezse `502`.
 - Zaman aşımı 25 sn (`AbortController`).
 
 ## Değerlendirici ve prompt
@@ -76,8 +76,8 @@ Tek değerlendirici: deneyimli bir stil danışmanı. Ciddi, net ve sert; ironi 
 | Durum | HTTP | İstemci mesajı |
 |---|---|---|
 | Geçersiz gövde / görsel > 1.5 MB | 400 | "Fotoğraf okunamadı, tekrar dene." |
-| Rate limit (cihaz başına dakikada 5, `x-device-id` başlığı, bellek içi) | 429 | "Hakem nefesleniyor, biraz bekle." |
-| OpenAI hata / zaman aşımı | 502 / 504 | "Hakem VAR'da takıldı." |
+| Rate limit (cihaz başına dakikada 5, `x-device-id` başlığı, bellek içi) | 429 | "Çok sık istek gönderdin, bir dakika sonra tekrar dene." |
+| OpenAI hata / zaman aşımı | 502 / 504 | "Değerlendirme şu an yapılamadı, tekrar dene." |
 | `isOutfit: false` | 200 | Sonuç ekranı özel boş durumu |
 
 Loglarda görsel verisi ve anahtar asla yazılmaz.

@@ -1,6 +1,6 @@
-# Kombin Hakemi
+# Prova
 
-Kombininin fotoğrafını çek, AI hakem puanını versin, kartını göstersin ve ironik yorumunu yapsın.
+Kombininin fotoğrafını çek; AI stil danışmanı moda ilkelerine göre kriter kriter puanlasın, seviyeni ve net bir stil raporu versin.
 Mobile Application Development dersi final projesi (Expo + React Native).
 
 ## Kurulum

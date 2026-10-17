@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "Kombin Hakemi",
+    "name": "Prova",
     "slug": "kombin-hakemi",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -25,7 +25,7 @@
       [
         "expo-camera",
         {
-          "cameraPermission": "Kombin Hakemi, kombinini çekip puanlayabilmek için kameranı kullanır.",
+          "cameraPermission": "Prova, kombinini çekip değerlendirebilmek için kameranı kullanır.",
           "microphonePermission": false,
           "recordAudioAndroid": false,
           "barcodeScannerEnabled": false
@@ -34,7 +34,7 @@
       [
         "expo-image-picker",
         {
-          "photosPermission": "Kombin Hakemi, galerinden seçtiğin kombini puanlayabilmek için fotoğraflarına erişir.",
+          "photosPermission": "Prova, galerinden seçtiğin kombini değerlendirebilmek için fotoğraflarına erişir.",
           "microphonePermission": false
         }
       ],

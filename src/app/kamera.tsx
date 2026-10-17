@@ -44,11 +44,11 @@ export default function KameraScreen() {
   if (!permission.granted) {
     return (
       <Screen style={{ justifyContent: 'center', gap: space.lg }}>
-        <AppText variant="display">Hakem görmeden karar vermez</AppText>
+        <AppText variant="display">Kamera izni gerekli</AppText>
         <AppText muted>
           {permission.canAskAgain
             ? 'Kombinini değerlendirebilmem için kameraya erişmem lazım.'
-            : "Kamera izni kapalı. Ayarlar'dan açarsan düdüğü çalarım."}
+            : "Kamera izni kapalı. Ayarlar'dan açarsan kombinini çekebilirsin."}
         </AppText>
         {permission.canAskAgain ? (
           <Button label="Kameraya izin ver" onPress={requestPermission} />

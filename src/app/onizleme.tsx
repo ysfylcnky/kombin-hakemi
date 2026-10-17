@@ -17,9 +17,9 @@ export default function OnizlemeScreen() {
   if (!uri) {
     return (
       <Screen style={{ justifyContent: 'center', gap: space.lg }}>
-        <AppText variant="title">Kare boş kaldı</AppText>
-        <AppText muted>Hakem boş kareye düdük çalamaz. Bir fotoğraf çek ya da seç.</AppText>
-        <Button label="Hakem'e dön" onPress={() => router.dismissTo('/')} />
+        <AppText variant="title">Fotoğraf yok</AppText>
+        <AppText muted>Değerlendirme için bir fotoğraf çek ya da galeriden seç.</AppText>
+        <Button label="Ana ekrana dön" onPress={() => router.dismissTo('/')} />
       </Screen>
     );
   }
@@ -65,7 +65,7 @@ export default function OnizlemeScreen() {
         </View>
       </View>
       <Button
-        label="Hakeme gönder"
+        label="Değerlendir"
         onPress={() => router.push({ pathname: '/sonuc', params: { uri, occasion } })}
       />
       <Button label="Tekrar çek" variant="ghost" onPress={() => router.back()} />

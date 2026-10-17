@@ -20,11 +20,11 @@ import { useTheme } from '@/hooks/use-theme';
 import type { Criteria, JudgeRequest, Level, Verdict } from '@/lib/ai/schema';
 
 const loadingMessages = [
-  "Hakem VAR'a gitti…",
   'Renk paleti inceleniyor…',
-  'Paça boyu ölçülüyor…',
-  'Yan hakemle görüşüyor…',
-  'Kart cebinde, karar yakın…',
+  'Oran ve siluet ölçülüyor…',
+  'Kalıp ve oturuş kontrol ediliyor…',
+  'Ayakkabı ve aksesuarlar inceleniyor…',
+  'Rapor hazırlanıyor…',
 ];
 
 const criterionLabels: Record<keyof Criteria, string> = {
@@ -174,7 +174,7 @@ export default function SonucScreen() {
   if (error) {
     return (
       <Screen style={{ justifyContent: 'center', gap: space.lg }}>
-        <AppText variant="title">Düdük çalmadı</AppText>
+        <AppText variant="title">Değerlendirme tamamlanamadı</AppText>
         <AppText muted>{error}</AppText>
         <Button label="Tekrar dene" onPress={() => setAttempt((a) => a + 1)} />
         <Button label="Geri dön" variant="ghost" onPress={() => router.back()} />

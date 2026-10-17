@@ -31,7 +31,7 @@ async function callOpenAI({ imageBase64, occasion }: JudgeRequest, signal: Abort
           ],
         },
       ],
-      text: { format: { type: 'json_schema', name: 'hakem_karari', schema, strict: true } },
+      text: { format: { type: 'json_schema', name: 'stil_raporu', schema, strict: true } },
     }),
     signal,
   });
