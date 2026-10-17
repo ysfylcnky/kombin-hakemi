@@ -1,13 +1,12 @@
 # Sprint durumu
 
-Aktif: S07 (görevler bitti, kapanış bekliyor) · Son güncelleme: 2026-10-17
-Aktif sprint başlangıç commit'i: 62cdb97
+Aktif: yok · Sonraki: S08 · Son güncelleme: 2026-10-17
+Aktif sprint başlangıç commit'i: -
 
 ## Taşınan işler
 -
 
 ## Kalıcı kararlar
-- Stil yalnızca `useTheme()` (`colors`, `space`, `radius`, `typography`); font ağırlığı `fontFamily` ile; palet kum / koyu kahve / camel, pembe-bordo yok.
 - Hedef yalnızca iPhone + Android (Expo Go); web'e özel kod yazılmaz.
 - Kamera üstü katman temadan bağımsız `colors.dark` kullanır (önizleme hep koyu).
 - Görsel istemcide `prepareImage` ile 1024px JPEG'e küçültülüp base64 gönderilir.
@@ -20,5 +19,5 @@ Aktif sprint başlangıç commit'i: 62cdb97
 - Tema tercihi `Appearance.setColorScheme` ile uygulanır, `expo-sqlite/kv-store` `theme` anahtarında saklanır; `useTheme` değişmez.
 
 ## Son sprintler
+- S07: karne; istatistik, haftalık bar grafik, rozetler, görsel stil raporu paylaşımı, tema ve veri temizleme ayarları · etiket sprint-07
 - S06: dolap; SQLite kayıt, kalıcı fotoğraf, filtreli grid, detay, favori, onaylı silme · etiket sprint-06
-- S05: Prova; 9 kriterli sunucu puanı, seviye, ortam seçimi, kriter dökümü, kum-camel tema · etiket sprint-05
