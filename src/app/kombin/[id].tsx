@@ -8,6 +8,7 @@ import { ActivityIndicator, Alert, ScrollView, View } from 'react-native';
 import { AppText } from '@/components/app-text';
 import { Button } from '@/components/button';
 import { Screen } from '@/components/screen';
+import { ShareVerdictButton } from '@/components/share-verdict-button';
 import { useTheme } from '@/hooks/use-theme';
 import {
   type Criteria,
@@ -111,6 +112,7 @@ export default function KombinScreen() {
           label={outfit.favorite ? 'Favorilerden çıkar' : 'Favorilere ekle'}
           onPress={toggleFavorite}
         />
+        <ShareVerdictButton photoUri={photoFile(outfit.photo).uri} verdict={verdict} occasion={outfit.occasion} />
         <Button label="Kombini sil" variant="ghost" onPress={confirmDelete} />
       </ScrollView>
     </Screen>

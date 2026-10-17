@@ -15,6 +15,7 @@ import { scheduleOnRN } from 'react-native-worklets';
 import { AppText } from '@/components/app-text';
 import { Button } from '@/components/button';
 import { Screen } from '@/components/screen';
+import { ShareVerdictButton } from '@/components/share-verdict-button';
 import { useJudgeOutfit } from '@/hooks/use-judge-outfit';
 import { useTheme } from '@/hooks/use-theme';
 import {
@@ -262,6 +263,7 @@ export default function SonucScreen() {
             </View>
           </View>
         )}
+        <ShareVerdictButton photoUri={uri} verdict={verdict} occasion={occasion} />
         <Button label="Yeni kombin" onPress={() => router.dismissTo('/')} />
       </ScrollView>
     </Screen>
