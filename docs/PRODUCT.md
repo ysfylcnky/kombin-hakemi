@@ -1,16 +1,15 @@
 # Kombin Hakemi — Ürün ve Teknik Tasarım
 
-> Kombininin fotoğrafını çek, yapay zekâ hakem sahaya çıksın: puan, unvan, ironik yorum ve kart.
+> Kombininin fotoğrafını çek, yapay zekâ stil hakemi sahaya çıksın: puan, kart ve sert ama işe yarar bir stil raporu.
 > Mobile Application Development final projesi · Expo + Claude Code skill'leri ile geliştirilir.
 
 ## 1. Ürün özeti
 
 | Başlık | Karar |
 |---|---|
-| Fikir | Kombin fotoğrafını AI hakeme gönder; 10 üzerinden puan, unvan ("Ofisin Sessiz Kahramanı"), hakem yorumu, artı/eksi, öneri |
+| Fikir | Kombin fotoğrafını AI hakeme gönder; 10 üzerinden puan, başlık ("Dengeli Smart Casual"), stilist yorumu, renk/kalıp/ortam/stil puanları, artı/eksi, uygulanabilir öneriler |
 | İroni | Futbol hakemi metaforu: puana göre **kırmızı / sarı / yeşil kart**, 9+ için **altın top** |
-| Hakemler | 👵 Anneanne · 💇 Mahalle Kuaförü · 🎩 Moda Editörü · ⚽ Maç Spikeri |
-| Sertlik | Nazik · Dürüst · Acımasız (acımasız bile kişiye değil kıyafete laf atar) |
+| Hakem | Tek hakem: ciddi stil danışmanı; eleştirisi sert ama yalnızca kıyafete, her eksiğe bir öneri |
 | Veri | Sadece cihazda (SQLite + dosya sistemi), hesap yok |
 | Platform | iOS + Android, Expo Go ile test |
 | Kapsam dışı | Hesap/login, bulut senkron, App Store yayını, sosyal akış |
@@ -39,7 +38,7 @@ flowchart LR
   A[Kamera / Galeri] --> B[Önizleme]
   B -->|1024px JPEG| C[useJudgeOutfit]
   C -->|POST /api/judge| D[API Route]
-  D -->|görsel + persona + sertlik| E[OpenAI API]
+  D -->|görsel| E[OpenAI API]
   E -->|tool_use JSON| D
   D -->|zod doğrulanmış Verdict| C
   C --> F[Sonuç ekranı]
@@ -52,12 +51,12 @@ flowchart LR
 
 | Ekran | Dosya | İçerik |
 |---|---|---|
-| Hakem (sekme) | `app/(tabs)/index.tsx` | Hakem + sertlik seçimi, çek / galeriden seç |
+| Hakem (sekme) | `app/(tabs)/index.tsx` | Çek / galeriden seç |
 | Kamera | `app/kamera.tsx` | Silüet kılavuzu, ön/arka, 3-2-1 zamanlayıcı |
 | Önizleme | `app/onizleme.tsx` | Tekrar çek / hakeme gönder |
-| Sonuç | `app/sonuc.tsx` | Yükleme → puan açılışı → kart → detaylar |
+| Sonuç | `app/sonuc.tsx` | Yükleme → puan açılışı → kart → stil raporu |
 | Dolap (sekme) | `app/(tabs)/dolap.tsx` | Kombin galerisi, filtre, favori |
 | Kombin detay | `app/kombin/[id].tsx` | Geçmiş karar, favori, sil, paylaş |
 | Karne (sekme) | `app/(tabs)/karne.tsx` | Haftalık grafik, en iyi/kötü, rozetler |
-| Ayarlar (sekme) | `app/(tabs)/ayarlar.tsx` | Varsayılan hakem, tema, bildirim, veri temizle |
+| Ayarlar (sekme) | `app/(tabs)/ayarlar.tsx` | Tema, bildirim, veri temizle |
 | Onboarding | `app/onboarding.tsx` | İlk açılışta 3 sayfa |

@@ -1,6 +1,5 @@
 import { judgeWithOpenAI } from '@/lib/ai/openai';
 import { mockVerdict } from '@/lib/ai/mock';
-import { systemPrompt } from '@/lib/ai/prompts';
 import { cardForScore, JudgeRequest } from '@/lib/ai/schema';
 
 const recentRequests = new Map<string, number[]>();
@@ -20,12 +19,11 @@ export async function POST(request: Request) {
   const body = JudgeRequest.safeParse(await request.json().catch(() => null));
   if (!body.success) return Response.json({ error: 'invalid_request' }, { status: 400 });
 
-  const { imageBase64, persona, harshness } = body.data;
   try {
     const verdict =
       process.env.AI_MOCK === '1'
         ? await mockVerdict()
-        : await judgeWithOpenAI(systemPrompt(persona, harshness), imageBase64);
+        : await judgeWithOpenAI(body.data.imageBase64);
     return Response.json({ ...verdict, card: cardForScore(verdict.score) });
   } catch (error) {
     const timedOut = error instanceof Error && error.name === 'TimeoutError';

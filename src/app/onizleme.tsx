@@ -24,8 +24,8 @@ export default function OnizlemeScreen() {
   }
 
   const send = async () => {
-    // Fixed judge until the Hakem tab gets pickers; the alert stands in for the S04 result screen.
-    const verdict = await judge(uri, 'spiker', 'durust');
+    // The alert stands in for the S04 report screen.
+    const verdict = await judge(uri);
     if (!verdict) return;
     Alert.alert(
       verdict.isOutfit ? `${verdict.score} · ${verdict.title}` : 'Kombin bulunamadı',

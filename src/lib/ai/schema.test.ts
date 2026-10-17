@@ -4,7 +4,7 @@ const verdict: Verdict = {
   isOutfit: true,
   score: 7.5,
   card: 'green',
-  title: 'Ofisin Sessiz Kahramanı',
+  title: 'Dengeli Smart Casual',
   commentary: 'Lacivert blazer işini biliyor.',
   categories: { colorHarmony: 8, fit: 7, occasion: 8, creativity: 6 },
   pros: ['Renkler uyumlu'],
@@ -37,15 +37,13 @@ describe('Verdict', () => {
 });
 
 describe('JudgeRequest', () => {
-  it('rejects an unknown persona', () => {
-    const result = JudgeRequest.safeParse({ imageBase64: 'abc', persona: 'dj', harshness: 'nazik' });
-    expect(result.success).toBe(false);
+  it('rejects an empty image', () => {
+    expect(JudgeRequest.safeParse({ imageBase64: '' }).success).toBe(false);
   });
 
   it('rejects an image larger than 1.5 MB', () => {
     const imageBase64 = 'a'.repeat(2 * 1024 * 1024 + 1);
-    const result = JudgeRequest.safeParse({ imageBase64, persona: 'spiker', harshness: 'nazik' });
-    expect(result.success).toBe(false);
+    expect(JudgeRequest.safeParse({ imageBase64 }).success).toBe(false);
   });
 });
 

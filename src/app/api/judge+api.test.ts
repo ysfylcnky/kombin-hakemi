@@ -15,17 +15,17 @@ function judge(deviceId: string, body: unknown) {
   );
 }
 
-const valid = { imageBase64: 'abc', persona: 'spiker', harshness: 'durust' };
+const valid = { imageBase64: 'abc' };
 
 describe('POST /api/judge', () => {
   it('returns a verdict whose card matches the score', async () => {
     const res = await judge('ok', valid);
     expect(res.status).toBe(200);
-    expect(await res.json()).toMatchObject({ score: 7.5, card: 'green' });
+    expect(await res.json()).toMatchObject({ score: 6, card: 'yellow' });
   });
 
   it('rejects an invalid body', async () => {
-    const res = await judge('invalid', { ...valid, persona: 'dj' });
+    const res = await judge('invalid', { imageBase64: '' });
     expect(res.status).toBe(400);
   });
 

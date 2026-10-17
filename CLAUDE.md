@@ -1,6 +1,6 @@
 # Kombin Hakemi
 
-Kombin fotoğrafını AI hakeme gönderen, puan + kart + ironik yorum veren Expo uygulaması.
+Kombin fotoğrafını AI stil hakemine gönderen, puan + kart + sert ama yapıcı stil raporu veren Expo uygulaması.
 Mobile Application Development final projesi. `AGENTS.md` Expo'nun kendi dosyasıdır, silinmez.
 
 ## Sadelik kuralları (her işte geçerli, diğer tüm kurallardan önce gelir)
