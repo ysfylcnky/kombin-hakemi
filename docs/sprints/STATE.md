@@ -19,5 +19,6 @@ Aktif sprint başlangıç commit'i: -
 - kv-store anahtarları: `reminder` (on/off, 7 günlük tek seferlik 19:00 bildirimleri `syncReminders` kurar), `onboarded` (ilk açılış tanıtımı).
 
 ## Son sprintler
+- S08–S09 arası: ana sayfa yeniden tasarımı; son prova kartı, çekim ipuçları, butonlar altta · sprint dışı
 - S08: cila; erişilebilirlik, çevrimdışı uyarı, günlük hatırlatma, Prova ikonu/splash, dolap performansı, onboarding · etiket sprint-08
 - S07: karne; istatistik, haftalık bar grafik, rozetler, görsel stil raporu paylaşımı, tema ve veri temizleme ayarları · etiket sprint-07
