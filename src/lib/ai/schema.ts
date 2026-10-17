@@ -4,7 +4,8 @@ export const Persona = z.enum(['anneanne', 'kuafor', 'editor', 'spiker']);
 export const Harshness = z.enum(['nazik', 'durust', 'acimasiz']);
 
 export const JudgeRequest = z.object({
-  imageBase64: z.string().min(1),
+  // 1.5 MB of JPEG is 2 MiB of base64 (4 chars per 3 bytes).
+  imageBase64: z.string().min(1).max(2 * 1024 * 1024),
   persona: Persona,
   harshness: Harshness,
 });

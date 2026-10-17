@@ -41,6 +41,12 @@ describe('JudgeRequest', () => {
     const result = JudgeRequest.safeParse({ imageBase64: 'abc', persona: 'dj', harshness: 'nazik' });
     expect(result.success).toBe(false);
   });
+
+  it('rejects an image larger than 1.5 MB', () => {
+    const imageBase64 = 'a'.repeat(2 * 1024 * 1024 + 1);
+    const result = JudgeRequest.safeParse({ imageBase64, persona: 'spiker', harshness: 'nazik' });
+    expect(result.success).toBe(false);
+  });
 });
 
 describe('cardForScore', () => {

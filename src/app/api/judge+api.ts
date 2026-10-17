@@ -1,10 +1,35 @@
 import { judgeWithClaude } from '@/lib/ai/claude';
 import { mockVerdict } from '@/lib/ai/mock';
 import { systemPrompt } from '@/lib/ai/prompts';
-import { JudgeRequest } from '@/lib/ai/schema';
+import { cardForScore, JudgeRequest } from '@/lib/ai/schema';
+
+const recentRequests = new Map<string, number[]>();
+
+function isRateLimited(deviceId: string) {
+  const now = Date.now();
+  const recent = (recentRequests.get(deviceId) ?? []).filter((time) => now - time < 60_000);
+  recent.push(now);
+  recentRequests.set(deviceId, recent);
+  return recent.length > 5;
+}
 
 export async function POST(request: Request) {
-  const { imageBase64, persona, harshness } = JudgeRequest.parse(await request.json());
-  if (process.env.AI_MOCK === '1') return Response.json(await mockVerdict());
-  return Response.json(await judgeWithClaude(systemPrompt(persona, harshness), imageBase64));
+  if (isRateLimited(request.headers.get('x-device-id') ?? 'unknown')) {
+    return Response.json({ error: 'rate_limited' }, { status: 429 });
+  }
+  const body = JudgeRequest.safeParse(await request.json().catch(() => null));
+  if (!body.success) return Response.json({ error: 'invalid_request' }, { status: 400 });
+
+  const { imageBase64, persona, harshness } = body.data;
+  try {
+    const verdict =
+      process.env.AI_MOCK === '1'
+        ? await mockVerdict()
+        : await judgeWithClaude(systemPrompt(persona, harshness), imageBase64);
+    return Response.json({ ...verdict, card: cardForScore(verdict.score) });
+  } catch (error) {
+    const timedOut = error instanceof Error && error.name === 'TimeoutError';
+    console.error('Judge failed:', error instanceof Error ? error.message : error);
+    return Response.json({ error: 'judge_failed' }, { status: timedOut ? 504 : 502 });
+  }
 }
