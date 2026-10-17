@@ -17,7 +17,14 @@ import { Button } from '@/components/button';
 import { Screen } from '@/components/screen';
 import { useJudgeOutfit } from '@/hooks/use-judge-outfit';
 import { useTheme } from '@/hooks/use-theme';
-import { type Criteria, type JudgeRequest, levelLabels, type Verdict } from '@/lib/ai/schema';
+import {
+  type Criteria,
+  criterionLabels,
+  type JudgeRequest,
+  levelColor,
+  levelLabels,
+  type Verdict,
+} from '@/lib/ai/schema';
 
 const loadingMessages = [
   'Renk paleti inceleniyor…',
@@ -26,26 +33,6 @@ const loadingMessages = [
   'Ayakkabı ve aksesuarlar inceleniyor…',
   'Rapor hazırlanıyor…',
 ];
-
-const criterionLabels: Record<keyof Criteria, string> = {
-  colorHarmony: 'Renk uyumu',
-  proportion: 'Oran ve siluet',
-  fit: 'Kalıp ve oturuş',
-  formality: 'Formalite tutarlılığı',
-  footwearAccessories: 'Ayakkabı ve aksesuar',
-  focalPoint: 'Odak noktası ve bütünlük',
-  texture: 'Doku ve kumaş',
-  pattern: 'Desen kullanımı',
-  grooming: 'Bakım ve özen',
-};
-
-const levelColor = {
-  weak: 'levelWeak',
-  developing: 'levelDeveloping',
-  good: 'levelGood',
-  veryGood: 'levelVeryGood',
-  flawless: 'levelFlawless',
-} as const;
 
 const countDuration = 900;
 

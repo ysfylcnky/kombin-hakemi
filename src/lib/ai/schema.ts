@@ -54,6 +54,26 @@ export const levelLabels: Record<Level, string> = {
   flawless: 'Kusursuz',
 };
 
+export const levelColor = {
+  weak: 'levelWeak',
+  developing: 'levelDeveloping',
+  good: 'levelGood',
+  veryGood: 'levelVeryGood',
+  flawless: 'levelFlawless',
+} as const;
+
+export const criterionLabels: Record<keyof Criteria, string> = {
+  colorHarmony: 'Renk uyumu',
+  proportion: 'Oran ve siluet',
+  fit: 'Kalıp ve oturuş',
+  formality: 'Formalite tutarlılığı',
+  footwearAccessories: 'Ayakkabı ve aksesuar',
+  focalPoint: 'Odak noktası ve bütünlük',
+  texture: 'Doku ve kumaş',
+  pattern: 'Desen kullanımı',
+  grooming: 'Bakım ve özen',
+};
+
 const weights: Record<keyof Criteria, number> = {
   colorHarmony: 20,
   proportion: 15,

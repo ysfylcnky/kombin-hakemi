@@ -119,10 +119,11 @@ export default function DolapScreen() {
           )
         }
         renderItem={({ item }) => (
-          <View
-            accessible
+          <Pressable
+            accessibilityRole="button"
             accessibilityLabel={`${item.verdict.title}, puan ${item.verdict.score}, ${levelLabels[item.verdict.level]}`}
-            style={{ width: itemWidth }}>
+            onPress={() => router.push({ pathname: '/kombin/[id]', params: { id: item.id } })}
+            style={({ pressed }) => ({ width: itemWidth, opacity: pressed ? 0.7 : 1 })}>
             <Image
               source={photoFile(item.photo).uri}
               contentFit="cover"
@@ -143,7 +144,7 @@ export default function DolapScreen() {
               }}>
               {item.verdict.score}
             </AppText>
-          </View>
+          </Pressable>
         )}
       />
     </Screen>
