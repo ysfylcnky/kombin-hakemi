@@ -192,12 +192,13 @@ export default function SonucScreen() {
   const { judge, loading, error } = useJudgeOutfit();
   const [verdict, setVerdict] = useState<Verdict>();
   const [messageIndex, setMessageIndex] = useState(0);
+  const [attempt, setAttempt] = useState(0);
 
   useEffect(() => {
     judge(uri).then(setVerdict);
-    // judge is recreated every render; the request must run once per photo.
+    // judge is recreated every render; the request must run once per photo and retry.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [uri]);
+  }, [uri, attempt]);
 
   useEffect(() => {
     if (!loading) return;
@@ -207,8 +208,11 @@ export default function SonucScreen() {
 
   if (error) {
     return (
-      <Screen style={{ justifyContent: 'center' }}>
-        <AppText>{error}</AppText>
+      <Screen style={{ justifyContent: 'center', gap: space.lg }}>
+        <AppText variant="title">Düdük çalmadı</AppText>
+        <AppText muted>{error}</AppText>
+        <Button label="Tekrar dene" onPress={() => setAttempt((a) => a + 1)} />
+        <Button label="Geri dön" variant="ghost" onPress={() => router.back()} />
       </Screen>
     );
   }
@@ -220,6 +224,16 @@ export default function SonucScreen() {
         <AppText variant="title" accessibilityLiveRegion="polite">
           {loadingMessages[messageIndex]}
         </AppText>
+      </Screen>
+    );
+  }
+
+  if (!verdict.isOutfit) {
+    return (
+      <Screen style={{ justifyContent: 'center', gap: space.lg }}>
+        <AppText variant="title">Kombin bulunamadı</AppText>
+        <AppText muted>{verdict.commentary}</AppText>
+        <Button label="Başka fotoğraf seç" onPress={() => router.dismissTo('/')} />
       </Screen>
     );
   }
