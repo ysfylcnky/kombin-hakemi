@@ -25,6 +25,9 @@ export default function KameraScreen() {
   const [facing, setFacing] = useState<CameraType>('back');
   const [busy, setBusy] = useState(false);
   const [flash, setFlash] = useState(false);
+  const [timerOn, setTimerOn] = useState(false);
+  const [count, setCount] = useState<number | null>(null);
+  const countdown = useRef<ReturnType<typeof setInterval>>(undefined);
 
   // The hook never re-checks, so a grant made in Settings would go unnoticed on return.
   useEffect(() => {
@@ -33,6 +36,8 @@ export default function KameraScreen() {
     });
     return () => sub.remove();
   }, [getPermission]);
+
+  useEffect(() => () => clearInterval(countdown.current), []);
 
   if (!permission) return null;
 
@@ -70,8 +75,30 @@ export default function KameraScreen() {
     setBusy(false);
   };
 
+  const onShutter = () => {
+    if (count !== null) {
+      clearInterval(countdown.current);
+      setCount(null);
+      return;
+    }
+    if (!timerOn) return capture();
+    let n = 3;
+    setCount(n);
+    Haptics.selectionAsync();
+    countdown.current = setInterval(() => {
+      n -= 1;
+      if (n > 0) {
+        setCount(n);
+        Haptics.selectionAsync();
+        return;
+      }
+      clearInterval(countdown.current);
+      setCount(null);
+      capture();
+    }, 1000);
+  };
+
   const guide = { borderWidth: 2, borderStyle: 'dashed', borderColor: overlay.text } as const;
-  const chip = { padding: space.md, borderRadius: radius.pill, backgroundColor: overlay.bg } as const;
 
   return (
     <View style={{ flex: 1, backgroundColor: overlay.bg }}>
@@ -94,17 +121,22 @@ export default function KameraScreen() {
           flexDirection: 'row',
           justifyContent: 'space-between',
         }}>
-        <Pressable accessibilityRole="button" accessibilityLabel="Kapat" onPress={() => router.back()} style={chip}>
-          <AppText style={{ color: overlay.text }}>Kapat</AppText>
-        </Pressable>
-        <Pressable
-          accessibilityRole="button"
-          accessibilityLabel="Kamerayı çevir"
-          onPress={() => setFacing(facing === 'back' ? 'front' : 'back')}
-          style={chip}>
-          <AppText style={{ color: overlay.text }}>Çevir</AppText>
-        </Pressable>
+        <Chip label="Kapat" onPress={() => router.back()} />
+        <View style={{ flexDirection: 'row', gap: space.sm }}>
+          <Chip label={timerOn ? '3-2-1 açık' : '3-2-1 kapalı'} onPress={() => setTimerOn(!timerOn)} />
+          <Chip label="Çevir" onPress={() => setFacing(facing === 'back' ? 'front' : 'back')} />
+        </View>
       </View>
+
+      {count !== null && (
+        <View
+          pointerEvents="none"
+          style={[StyleSheet.absoluteFill, { alignItems: 'center', justifyContent: 'center' }]}>
+          <AppText variant="score" style={{ color: overlay.text }} accessibilityLiveRegion="assertive">
+            {count}
+          </AppText>
+        </View>
+      )}
 
       <View
         style={{
@@ -120,9 +152,9 @@ export default function KameraScreen() {
         </AppText>
         <Pressable
           accessibilityRole="button"
-          accessibilityLabel="Fotoğraf çek"
+          accessibilityLabel={count !== null ? 'Zamanlayıcıyı iptal et' : 'Fotoğraf çek'}
           disabled={busy}
-          onPress={capture}
+          onPress={onShutter}
           style={({ pressed }) => ({
             width: space.xxl * 2,
             aspectRatio: 1,
@@ -137,5 +169,18 @@ export default function KameraScreen() {
 
       {flash && <View pointerEvents="none" style={[StyleSheet.absoluteFill, { backgroundColor: overlay.text }]} />}
     </View>
+  );
+}
+
+function Chip({ label, onPress }: { label: string; onPress: () => void }) {
+  const { space, radius } = useTheme();
+  return (
+    <Pressable
+      accessibilityRole="button"
+      accessibilityLabel={label}
+      onPress={onPress}
+      style={{ padding: space.md, borderRadius: radius.pill, backgroundColor: overlay.bg }}>
+      <AppText style={{ color: overlay.text }}>{label}</AppText>
+    </Pressable>
   );
 }
