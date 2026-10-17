@@ -1,6 +1,6 @@
 ---
 name: ai-hakem
-description: Kombin Hakemi'nin AI katmanı kuralları - /api/judge API route'u, Claude görsel çağrısı, hakem kişilikleri, Verdict şeması, güvenlik ve mock modu. AI, prompt, API route veya Verdict ile ilgili her işte kullan.
+description: Kombin Hakemi'nin AI katmanı kuralları - /api/judge API route'u, OpenAI görsel çağrısı, hakem kişilikleri, Verdict şeması, güvenlik ve mock modu. AI, prompt, API route veya Verdict ile ilgili her işte kullan.
 paths: "app/api/**, lib/ai/**, lib/api/**, hooks/useJudgeOutfit*"
 ---
 
@@ -10,7 +10,7 @@ paths: "app/api/**, lib/ai/**, lib/api/**, hooks/useJudgeOutfit*"
 ```
 Telefon: lib/image.ts (1024px JPEG, base64)
   → lib/api/judge.ts  POST /api/judge  { imageBase64, persona, harshness }
-  → app/api/judge+api.ts  (zod doğrula → Claude → zod doğrula)
+  → app/api/judge+api.ts  (zod doğrula → OpenAI → zod doğrula)
   → Verdict JSON → useJudgeOutfit (useState) → sonuç ekranı
 ```
 
@@ -20,7 +20,7 @@ Telefon: lib/image.ts (1024px JPEG, base64)
 | `app/api/judge+api.ts` | `export async function POST(req: Request)`; yalnızca orkestrasyon |
 | `lib/ai/schema.ts` | `JudgeRequest`, `Verdict` zod şemaları + `type Verdict = z.infer<…>` |
 | `lib/ai/prompts.ts` | Sistem prompt'u, persona ve sertlik metinleri |
-| `lib/ai/claude.ts` | `fetch` ile Messages API çağrısı (SDK yok, sunucu runtime'ında hafif kalsın) |
+| `lib/ai/openai.ts` | `fetch` ile Responses API çağrısı (SDK yok, sunucu runtime'ında hafif kalsın) |
 | `lib/ai/mock.ts` | `AI_MOCK=1` iken gecikmeli sahte Verdict |
 | `lib/api/judge.ts` | İstemci tarafı `fetch('/api/judge')` |
 
@@ -29,9 +29,9 @@ Telefon: lib/image.ts (1024px JPEG, base64)
 ## Ortam değişkenleri
 | Değişken | Nerede | Not |
 |---|---|---|
-| `ANTHROPIC_API_KEY` | `.env` (gitignore) ve EAS Hosting | **Asla** `EXPO_PUBLIC_` önekli değil |
-| `AI_MODEL` | `.env` | Varsayılan `claude-haiku-5-5` |
-| `AI_MOCK` | `.env` | `1` → Claude çağrılmaz |
+| `OPENAI_API_KEY` | `.env` (gitignore) ve EAS Hosting | **Asla** `EXPO_PUBLIC_` önekli değil |
+| `AI_MODEL` | `.env` | Varsayılan `gpt-6-luna` |
+| `AI_MOCK` | `.env` | `1` → OpenAI çağrılmaz |
 
 ## Verdict şeması
 ```ts
@@ -55,10 +55,10 @@ export const Verdict = z.object({
 ```
 Kart kuralı sunucuda puandan da kontrol edilir: <4 red, 4–6.5 yellow, 7–8.5 green, ≥9 golden.
 
-## Claude çağrısı
-- `POST https://api.anthropic.com/v1/messages`, başlıklar: `x-api-key`, `anthropic-version: 2023-06-01`, `content-type: application/json`.
-- `max_tokens: 800`, görsel `{ type: 'image', source: { type: 'base64', media_type: 'image/jpeg', data } }`.
-- Yapısal çıktı: Verdict'i JSON Schema olarak tanımlayan `hakem_karari` tool'u + `tool_choice: { type: 'tool', name: 'hakem_karari' }`. Yanıttaki `tool_use.input` zod ile doğrulanır; geçmezse bir kez tekrar denenir, yine geçmezse `502`.
+## OpenAI çağrısı
+- `POST https://api.openai.com/v1/responses`, başlıklar: `authorization: Bearer …`, `content-type: application/json`.
+- Sistem prompt'u `instructions`'ta; görsel `{ type: 'input_image', image_url: 'data:image/jpeg;base64,…' }`.
+- Yapısal çıktı: `text.format = { type: 'json_schema', name: 'hakem_karari', schema, strict: true }`. Şema `z.toJSONSchema(Verdict)`'ten üretilir; strict mod `maxLength` desteklemediği için o alan silinir, uzunluğu zod denetler. `output_text` zod ile doğrulanır; geçmezse bir kez tekrar denenir, yine geçmezse `502`.
 - Zaman aşımı 25 sn (`AbortController`).
 
 ## Hakemler ve sertlik
@@ -86,7 +86,7 @@ Kart kuralı sunucuda puandan da kontrol edilir: <4 red, 4–6.5 yellow, 7–8.5
 |---|---|---|
 | Geçersiz gövde / görsel > 1.5 MB | 400 | "Fotoğraf okunamadı, tekrar dene." |
 | Rate limit (cihaz başına dakikada 5, `x-device-id` başlığı, bellek içi) | 429 | "Hakem nefesleniyor, biraz bekle." |
-| Claude hata / zaman aşımı | 502 / 504 | "Hakem VAR'da takıldı." |
+| OpenAI hata / zaman aşımı | 502 / 504 | "Hakem VAR'da takıldı." |
 | `isOutfit: false` | 200 | Sonuç ekranı özel boş durumu |
 
 Loglarda görsel verisi ve anahtar asla yazılmaz.
@@ -94,4 +94,4 @@ Loglarda görsel verisi ve anahtar asla yazılmaz.
 ## Test
 - `schema.test.ts`: geçerli/geçersiz Verdict, kart-puan kuralı.
 - `prompts.test.ts`: her persona × sertlik prompt'u güvenlik kurallarını içeriyor.
-- API route testleri `AI_MOCK=1` ile; gerçek Claude'a testte istek atılmaz.
+- API route testleri `AI_MOCK=1` ile; gerçek OpenAI'ye testte istek atılmaz.

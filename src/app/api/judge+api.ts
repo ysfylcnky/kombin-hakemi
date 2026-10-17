@@ -1,4 +1,4 @@
-import { judgeWithClaude } from '@/lib/ai/claude';
+import { judgeWithOpenAI } from '@/lib/ai/openai';
 import { mockVerdict } from '@/lib/ai/mock';
 import { systemPrompt } from '@/lib/ai/prompts';
 import { cardForScore, JudgeRequest } from '@/lib/ai/schema';
@@ -25,7 +25,7 @@ export async function POST(request: Request) {
     const verdict =
       process.env.AI_MOCK === '1'
         ? await mockVerdict()
-        : await judgeWithClaude(systemPrompt(persona, harshness), imageBase64);
+        : await judgeWithOpenAI(systemPrompt(persona, harshness), imageBase64);
     return Response.json({ ...verdict, card: cardForScore(verdict.score) });
   } catch (error) {
     const timedOut = error instanceof Error && error.name === 'TimeoutError';

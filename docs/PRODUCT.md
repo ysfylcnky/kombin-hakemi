@@ -22,7 +22,7 @@
 | Çatı | Expo (create-expo-app@latest, TypeScript) | Ders gereksinimi |
 | Yönlendirme | expo-router (tabs + stack) | Dosya tabanlı, API route desteği |
 | Kamera / görsel | expo-camera, expo-image-picker, expo-image-manipulator, expo-image | Çekim, seçim, sıkıştırma, hızlı gösterim |
-| AI | Expo Router API route → Claude Messages API (görsel + zorunlu tool çıktısı) | Anahtar sunucuda kalır, JSON garantili |
+| AI | Expo Router API route → OpenAI Responses API (görsel + strict JSON Schema çıktısı) | Anahtar sunucuda kalır, JSON garantili |
 | Doğrulama | zod (yalnızca sunucuda) | AI yanıtı ve gelen istek sistem sınırı olduğu için |
 | İstek durumu | Basit `useJudgeOutfit` hook (useState) | Tek istek için kütüphane gereksiz |
 | Yerel veri | expo-sqlite (+ kv-store), expo-file-system | Dolap ve ayarlar cihazda |
@@ -39,7 +39,7 @@ flowchart LR
   A[Kamera / Galeri] --> B[Önizleme]
   B -->|1024px JPEG| C[useJudgeOutfit]
   C -->|POST /api/judge| D[API Route]
-  D -->|görsel + persona + sertlik| E[Claude API]
+  D -->|görsel + persona + sertlik| E[OpenAI API]
   E -->|tool_use JSON| D
   D -->|zod doğrulanmış Verdict| C
   C --> F[Sonuç ekranı]

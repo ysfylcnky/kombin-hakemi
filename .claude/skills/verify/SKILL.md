@@ -16,7 +16,7 @@ Sırayla çalıştır, ilk kırmızıda dur ve düzelt:
 | 4 | Expo sağlığı | `npx expo-doctor` | yalnızca sprint kapanışında ve yeni paket eklendiğinde |
 
 Ek kontroller (değişen dosyalarda, komutsuz göz taraması):
-- `EXPO_PUBLIC_` önekli bir API anahtarı veya istemci kodunda `ANTHROPIC` geçiyor mu? Varsa **dur**.
+- `EXPO_PUBLIC_` önekli bir API anahtarı veya istemci kodunda `OPENAI_API_KEY` geçiyor mu? Varsa **dur**.
 - `console.log` kalmış mı?
 - `constants/theme.ts` dışında sabit hex renk var mı?
 
