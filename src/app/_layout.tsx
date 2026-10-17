@@ -1,9 +1,11 @@
 import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
+import { SQLiteProvider } from 'expo-sqlite';
 import { useEffect } from 'react';
 
 import { useTheme } from '@/hooks/use-theme';
+import { migrateDb } from '@/lib/db/outfits';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -24,6 +26,8 @@ export default function RootLayout() {
   if (!loaded && !error) return null;
 
   return (
-    <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: colors.bg } }} />
+    <SQLiteProvider databaseName="prova.db" onInit={migrateDb}>
+      <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: colors.bg } }} />
+    </SQLiteProvider>
   );
 }
