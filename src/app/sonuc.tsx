@@ -154,7 +154,7 @@ function ListSection({
 export default function SonucScreen() {
   const { uri, occasion } = useLocalSearchParams<{ uri: string; occasion: JudgeRequest['occasion'] }>();
   const { colors, space, radius } = useTheme();
-  const { judge, loading, error } = useJudgeOutfit();
+  const { judge, loading, error, saveFailed } = useJudgeOutfit();
   const [verdict, setVerdict] = useState<Verdict>();
   const [messageIndex, setMessageIndex] = useState(0);
   const [attempt, setAttempt] = useState(0);
@@ -211,6 +211,11 @@ export default function SonucScreen() {
           <AppText variant="title" style={{ color: colors[levelColor[verdict.level]] }}>
             {levelLabel[verdict.level]}
           </AppText>
+          {saveFailed && (
+            <AppText variant="caption" muted>
+              Bu değerlendirme dolaba kaydedilemedi.
+            </AppText>
+          )}
         </View>
         <View style={{ gap: space.sm }}>
           <AppText variant="display">{verdict.title}</AppText>
