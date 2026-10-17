@@ -46,6 +46,14 @@ export const occasionLabels: Record<JudgeRequest['occasion'], string> = {
   sport: 'Spor',
 };
 
+export const levelLabels: Record<Level, string> = {
+  weak: 'Zayıf',
+  developing: 'Geliştirilmeli',
+  good: 'İyi',
+  veryGood: 'Çok iyi',
+  flawless: 'Kusursuz',
+};
+
 const weights: Record<keyof Criteria, number> = {
   colorHarmony: 20,
   proportion: 15,

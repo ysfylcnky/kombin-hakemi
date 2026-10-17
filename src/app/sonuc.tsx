@@ -17,7 +17,7 @@ import { Button } from '@/components/button';
 import { Screen } from '@/components/screen';
 import { useJudgeOutfit } from '@/hooks/use-judge-outfit';
 import { useTheme } from '@/hooks/use-theme';
-import type { Criteria, JudgeRequest, Level, Verdict } from '@/lib/ai/schema';
+import { type Criteria, type JudgeRequest, levelLabels, type Verdict } from '@/lib/ai/schema';
 
 const loadingMessages = [
   'Renk paleti inceleniyor…',
@@ -46,14 +46,6 @@ const levelColor = {
   veryGood: 'levelVeryGood',
   flawless: 'levelFlawless',
 } as const;
-
-const levelLabel: Record<Level, string> = {
-  weak: 'Zayıf',
-  developing: 'Geliştirilmeli',
-  good: 'İyi',
-  veryGood: 'Çok iyi',
-  flawless: 'Kusursuz',
-};
 
 const countDuration = 900;
 
@@ -209,7 +201,7 @@ export default function SonucScreen() {
         <View style={{ alignItems: 'center', gap: space.sm }}>
           <ScoreRing score={verdict.score} level={verdict.level} />
           <AppText variant="title" style={{ color: colors[levelColor[verdict.level]] }}>
-            {levelLabel[verdict.level]}
+            {levelLabels[verdict.level]}
           </AppText>
           {saveFailed && (
             <AppText variant="caption" muted>
