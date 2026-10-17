@@ -8,7 +8,7 @@
 | S02 | 26 Eki–1 Kas | Kamera ve fotoğraf | "Kombin çekip önizleyebiliyorum." |
 | S03 | 2–8 Kas | AI hakem backend | "Fotoğraf gidiyor, hakemden JSON karar dönüyor." |
 | S04 | 9–15 Kas | Sonuç ekranı | "Puan animasyonla açılıyor, kart çıkıyor." |
-| S05 | 16–22 Kas | Yön değişikliği: Prova | "Kriter bazlı ciddi puanlama, bordo editoryal tema, futbol dili yok." |
+| S05 | 16–22 Kas | Yön değişikliği: Prova | "Kriter bazlı ciddi puanlama, sıcak kum-camel tema, futbol dili yok." |
 | S06 | 23–29 Kas | Dolap (yerel veri) | "Her değerlendirme dolabıma kaydoluyor." |
 | S07 | 30 Kas–6 Ara | Karne ve paylaşım | "İstatistik, rozet ve paylaşılabilir stil raporu var." |
 | S08 | 7–13 Ara | Cila ve sağlamlık | "Erişilebilir, çevrimdışını bilen, bildirimli uygulama." |
