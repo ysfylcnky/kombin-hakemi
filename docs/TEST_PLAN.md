@@ -1,6 +1,6 @@
 # Manuel test planı
 
-iPhone ve Android'de Expo Go ile, canlı API'ye karşı koşulur. Her satırı iki cihazda dene; geçerse `x`, kalırsa `!` yaz ve aşağıdaki **Bulgular**'a ekle.
+iPhone ve Android'de Expo Go ile koşulur; `.env`'de gerçek `OPENAI_API_KEY` olsun, `AI_MOCK` kapalı (Expo Go istekleri bilgisayardaki `npx expo start` sunucusuna gider). Her satırı iki cihazda dene; geçerse `x`, kalırsa `!` yaz ve aşağıdaki **Bulgular**'a ekle.
 Her ekranda açık ve koyu temaya bir kez bak.
 
 ## Hazırlık

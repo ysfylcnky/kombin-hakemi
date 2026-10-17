@@ -1,6 +1,6 @@
 # Sprint durumu
 
-Aktif: S09 (devam, 1/5) · Son güncelleme: 2026-10-17
+Aktif: S09 (devam, 2/5) · Son güncelleme: 2026-10-17
 Aktif sprint başlangıç commit'i: 3083b96
 
 ## Taşınan işler
@@ -17,6 +17,7 @@ Aktif sprint başlangıç commit'i: 3083b96
 - Dolap `expo-sqlite` `prova.db` / `outfits` (karar JSON + score/level sütunu, `user_version` migration); fotoğraf `Paths.document/outfits`, DB'de yalnızca dosya adı.
 - Tema tercihi `Appearance.setColorScheme` ile uygulanır, `expo-sqlite/kv-store` `theme` anahtarında saklanır; `useTheme` değişmez.
 - kv-store anahtarları: `reminder` (on/off, 7 günlük tek seferlik 19:00 bildirimleri `syncReminders` kurar), `onboarded` (ilk açılış tanıtımı).
+- API canlıda `https://prova.expo.app` (EAS Hosting, `@ysfylcnky1/kombin-hakemi`); deploy: `npx expo export -p web` + `npx eas-cli deploy --prod --environment production` (kullanıcı terminalinden). Expo Go dev sunucusunu kullanır, `origin` yalnızca production derlemede.
 
 ## Son sprintler
 - S08–S09 arası: ana sayfa yeniden tasarımı; son prova kartı, çekim ipuçları, butonlar altta · sprint dışı

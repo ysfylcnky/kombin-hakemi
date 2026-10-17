@@ -21,7 +21,12 @@
       "favicon": "./assets/images/favicon.png"
     },
     "plugins": [
-      "expo-router",
+      [
+        "expo-router",
+        {
+          "origin": "https://prova.expo.app"
+        }
+      ],
       [
         "expo-camera",
         {
@@ -52,6 +57,12 @@
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "0b6f895e-c2c3-48c0-95bf-c93cef2812ab"
+      }
+    },
+    "owner": "ysfylcnky1"
   }
 }
