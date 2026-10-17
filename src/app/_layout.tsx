@@ -11,7 +11,7 @@ import { migrateDb } from '@/lib/db/outfits';
 import { syncReminders } from '@/lib/reminder';
 
 SplashScreen.preventAutoHideAsync();
-Appearance.setColorScheme((Storage.getItemSync('theme') ?? 'unspecified') as ColorSchemeName);
+Appearance.setColorScheme?.((Storage.getItemSync('theme') ?? 'unspecified') as ColorSchemeName);
 
 export default function RootLayout() {
   const { colors } = useTheme();
