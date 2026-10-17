@@ -24,7 +24,7 @@ Telefon: lib/image.ts (1024px JPEG, base64)
 | `lib/ai/mock.ts` | `AI_MOCK=1` iken gecikmeli sahte Verdict |
 | `lib/api/judge.ts` | İstemci tarafı `fetch('/api/judge')` |
 
-`app.json` → `"web": { "output": "server" }`. Üretimde expo-router plugin'ine `origin` verilir (Sprint 8).
+`app.json` → `"web": { "output": "server" }`. Üretimde expo-router plugin'ine `origin` verilir (Sprint 9).
 
 ## Ortam değişkenleri
 | Değişken | Nerede | Not |
