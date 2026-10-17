@@ -8,6 +8,7 @@ import { Appearance, type ColorSchemeName } from 'react-native';
 
 import { useTheme } from '@/hooks/use-theme';
 import { migrateDb } from '@/lib/db/outfits';
+import { syncReminders } from '@/lib/reminder';
 
 SplashScreen.preventAutoHideAsync();
 Appearance.setColorScheme((Storage.getItemSync('theme') ?? 'unspecified') as ColorSchemeName);
@@ -29,7 +30,7 @@ export default function RootLayout() {
   if (!loaded && !error) return null;
 
   return (
-    <SQLiteProvider databaseName="prova.db" onInit={migrateDb}>
+    <SQLiteProvider databaseName="prova.db" onInit={(db) => migrateDb(db).then(() => void syncReminders(db))}>
       <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: colors.bg } }} />
     </SQLiteProvider>
   );

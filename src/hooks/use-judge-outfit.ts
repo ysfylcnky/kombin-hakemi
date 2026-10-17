@@ -5,6 +5,7 @@ import type { JudgeRequest } from '@/lib/ai/schema';
 import { judgeOutfit } from '@/lib/api/judge';
 import { insertOutfit } from '@/lib/db/outfits';
 import { persistPhoto, prepareImage } from '@/lib/image';
+import { syncReminders } from '@/lib/reminder';
 
 export function useJudgeOutfit() {
   const db = useSQLiteContext();
@@ -24,7 +25,7 @@ export function useJudgeOutfit() {
       if (verdict.isOutfit) {
         await persistPhoto(image.uri)
           .then((photo) => insertOutfit(db, { photo, occasion, verdict }))
-          .catch(() => setSaveFailed(true));
+          .then(() => void syncReminders(db), () => setSaveFailed(true));
       }
       return verdict;
     } catch (e) {
