@@ -1,9 +1,13 @@
+import { Redirect } from 'expo-router';
 import { NativeTabs } from 'expo-router/unstable-native-tabs';
+import Storage from 'expo-sqlite/kv-store';
 
 import { useTheme } from '@/hooks/use-theme';
 
 export default function TabsLayout() {
   const { colors } = useTheme();
+
+  if (Storage.getItemSync('onboarded') !== '1') return <Redirect href="/tanitim" />;
 
   return (
     <NativeTabs
