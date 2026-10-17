@@ -32,6 +32,13 @@
         }
       ],
       [
+        "expo-image-picker",
+        {
+          "photosPermission": "Kombin Hakemi, galerinden seçtiğin kombini puanlayabilmek için fotoğraflarına erişir.",
+          "microphonePermission": false
+        }
+      ],
+      [
         "expo-splash-screen",
         {
           "backgroundColor": "#0F1A14",
