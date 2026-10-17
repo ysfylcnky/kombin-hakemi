@@ -17,7 +17,7 @@ import { Button } from '@/components/button';
 import { Screen } from '@/components/screen';
 import { useJudgeOutfit } from '@/hooks/use-judge-outfit';
 import { useTheme } from '@/hooks/use-theme';
-import type { Criteria, Verdict } from '@/lib/ai/schema';
+import type { Criteria, JudgeRequest, Verdict } from '@/lib/ai/schema';
 
 const loadingMessages = [
   "Hakem VAR'a gitti…",
@@ -136,7 +136,7 @@ function ListSection({
 }
 
 export default function SonucScreen() {
-  const { uri } = useLocalSearchParams<{ uri: string }>();
+  const { uri, occasion } = useLocalSearchParams<{ uri: string; occasion: JudgeRequest['occasion'] }>();
   const { colors, space, radius } = useTheme();
   const { judge, loading, error } = useJudgeOutfit();
   const [verdict, setVerdict] = useState<Verdict>();
@@ -144,10 +144,10 @@ export default function SonucScreen() {
   const [attempt, setAttempt] = useState(0);
 
   useEffect(() => {
-    judge(uri).then(setVerdict);
+    judge(uri, occasion).then(setVerdict);
     // judge is recreated every render; the request must run once per photo and retry.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [uri, attempt]);
+  }, [uri, occasion, attempt]);
 
   useEffect(() => {
     if (!loading) return;

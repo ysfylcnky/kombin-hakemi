@@ -15,7 +15,7 @@ function judge(deviceId: string, body: unknown) {
   );
 }
 
-const valid = { imageBase64: 'abc' };
+const valid = { imageBase64: 'abc', occasion: 'business' };
 
 describe('POST /api/judge', () => {
   it('returns a verdict with the computed score and level', async () => {
@@ -25,7 +25,7 @@ describe('POST /api/judge', () => {
   });
 
   it('rejects an invalid body', async () => {
-    const res = await judge('invalid', { imageBase64: '' });
+    const res = await judge('invalid', { imageBase64: 'abc', occasion: 'beach' });
     expect(res.status).toBe(400);
   });
 

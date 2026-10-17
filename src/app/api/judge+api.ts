@@ -23,7 +23,7 @@ export async function POST(request: Request) {
     const verdict =
       process.env.AI_MOCK === '1'
         ? await mockVerdict()
-        : await judgeWithOpenAI(body.data.imageBase64);
+        : await judgeWithOpenAI(body.data);
     const score = scoreCriteria(verdict.criteria);
     return Response.json({ ...verdict, score, level: levelForScore(score) });
   } catch (error) {

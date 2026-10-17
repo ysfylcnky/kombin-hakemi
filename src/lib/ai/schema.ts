@@ -3,6 +3,7 @@ import { z } from 'zod';
 export const JudgeRequest = z.object({
   // 1.5 MB of JPEG is 2 MiB of base64 (4 chars per 3 bytes).
   imageBase64: z.string().min(1).max(2 * 1024 * 1024),
+  occasion: z.enum(['casual', 'business', 'formal', 'sport']),
 });
 
 const observation = z.string().max(120);
@@ -37,6 +38,13 @@ export type ModelVerdict = z.infer<typeof ModelVerdict>;
 export type Criteria = ModelVerdict['criteria'];
 export type Level = 'weak' | 'developing' | 'good' | 'veryGood' | 'flawless';
 export type Verdict = ModelVerdict & { score: number; level: Level };
+
+export const occasionLabels: Record<JudgeRequest['occasion'], string> = {
+  casual: 'Günlük',
+  business: 'İş',
+  formal: 'Davet',
+  sport: 'Spor',
+};
 
 export const weights: Record<keyof Criteria, number> = {
   colorHarmony: 20,

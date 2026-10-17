@@ -63,12 +63,16 @@ describe('ModelVerdict', () => {
 
 describe('JudgeRequest', () => {
   it('rejects an empty image', () => {
-    expect(JudgeRequest.safeParse({ imageBase64: '' }).success).toBe(false);
+    expect(JudgeRequest.safeParse({ imageBase64: '', occasion: 'casual' }).success).toBe(false);
+  });
+
+  it('rejects an unknown occasion', () => {
+    expect(JudgeRequest.safeParse({ imageBase64: 'abc', occasion: 'beach' }).success).toBe(false);
   });
 
   it('rejects an image larger than 1.5 MB', () => {
     const imageBase64 = 'a'.repeat(2 * 1024 * 1024 + 1);
-    expect(JudgeRequest.safeParse({ imageBase64 }).success).toBe(false);
+    expect(JudgeRequest.safeParse({ imageBase64, occasion: 'casual' }).success).toBe(false);
   });
 });
 
