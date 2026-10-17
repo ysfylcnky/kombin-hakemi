@@ -30,6 +30,7 @@ export default function OnizlemeScreen() {
         source={uri}
         contentFit="contain"
         style={{ flex: 1 }}
+        accessible
         accessibilityLabel="Kombin fotoğrafın"
       />
       <View style={{ gap: space.sm }}>

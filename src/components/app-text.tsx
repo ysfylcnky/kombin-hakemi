@@ -9,6 +9,7 @@ export function AppText({ variant = 'body', muted, style, ...rest }: Props) {
   const { colors, typography } = useTheme();
   return (
     <Text
+      accessibilityRole={variant === 'display' || variant === 'title' ? 'header' : undefined}
       style={[typography[variant], { color: muted ? colors.textMuted : colors.text }, style]}
       {...rest}
     />

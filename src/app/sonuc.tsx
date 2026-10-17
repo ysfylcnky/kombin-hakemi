@@ -103,7 +103,9 @@ function ScoreRing({ score, level }: Pick<Verdict, 'score' | 'level'>) {
           fill="none"
         />
       </Svg>
-      <AppText variant="score">{shown}</AppText>
+      <AppText variant="score" maxFontSizeMultiplier={1}>
+        {shown}
+      </AppText>
     </View>
   );
 }
@@ -211,7 +213,7 @@ export default function SonucScreen() {
                 accessible
                 accessibilityLabel={`${criterionLabels[key]}, ${score === null ? 'puanlanmadı' : `10 üzerinden ${score}`}. ${observation}`}
                 style={{ gap: space.xs }}>
-                <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between', flexWrap: 'wrap' }}>
                   <AppText>{criterionLabels[key]}</AppText>
                   <AppText>{score ?? '—'}</AppText>
                 </View>

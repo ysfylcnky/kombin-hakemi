@@ -139,7 +139,7 @@ export default function KarneScreen() {
             { label: 'En güçlü', area: areas.strongest },
             { label: 'En zayıf', area: areas.weakest },
           ].map(({ label, area }) => (
-            <View key={label} style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+            <View key={label} style={{ flexDirection: 'row', justifyContent: 'space-between', flexWrap: 'wrap' }}>
               <AppText muted>{label}</AppText>
               <AppText>
                 {criterionLabels[area.key]} · {area.average}

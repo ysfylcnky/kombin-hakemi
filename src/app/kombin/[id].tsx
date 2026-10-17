@@ -82,10 +82,11 @@ export default function KombinScreen() {
           source={photoFile(outfit.photo).uri}
           contentFit="cover"
           style={{ width: '100%', aspectRatio: 3 / 4, borderRadius: radius.md }}
+          accessible
           accessibilityLabel="Kombin fotoğrafı"
         />
         <View style={{ gap: space.sm }}>
-          <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'baseline' }}>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'baseline', flexWrap: 'wrap' }}>
             <AppText variant="title" style={{ color: colors[levelColor[verdict.level]] }}>
               {levelLabels[verdict.level]}
             </AppText>
@@ -102,7 +103,7 @@ export default function KombinScreen() {
         <View style={{ gap: space.sm }}>
           <AppText variant="title">Kriterler</AppText>
           {(Object.keys(criterionLabels) as (keyof Criteria)[]).map((key) => (
-            <View key={key} style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+            <View key={key} style={{ flexDirection: 'row', justifyContent: 'space-between', flexWrap: 'wrap' }}>
               <AppText>{criterionLabels[key]}</AppText>
               <AppText>{verdict.criteria[key].score ?? '—'}</AppText>
             </View>
