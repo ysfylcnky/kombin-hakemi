@@ -1,3 +1,4 @@
+import { Directory, Paths } from 'expo-file-system';
 import type { SQLiteDatabase } from 'expo-sqlite';
 
 import type { JudgeRequest, Level, Verdict } from '@/lib/ai/schema';
@@ -85,4 +86,10 @@ export async function deleteOutfit(db: SQLiteDatabase, { id, photo }: Pick<Outfi
   await db.runAsync('DELETE FROM outfits WHERE id = ?', id);
   const file = photoFile(photo);
   if (file.exists) file.delete();
+}
+
+export async function clearOutfits(db: SQLiteDatabase) {
+  await db.runAsync('DELETE FROM outfits');
+  const folder = new Directory(Paths.document, 'outfits');
+  if (folder.exists) folder.delete();
 }

@@ -2,12 +2,15 @@ import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { SQLiteProvider } from 'expo-sqlite';
+import Storage from 'expo-sqlite/kv-store';
 import { useEffect } from 'react';
+import { Appearance, type ColorSchemeName } from 'react-native';
 
 import { useTheme } from '@/hooks/use-theme';
 import { migrateDb } from '@/lib/db/outfits';
 
 SplashScreen.preventAutoHideAsync();
+Appearance.setColorScheme((Storage.getItemSync('theme') ?? 'unspecified') as ColorSchemeName);
 
 export default function RootLayout() {
   const { colors } = useTheme();

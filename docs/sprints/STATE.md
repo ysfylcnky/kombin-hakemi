@@ -1,6 +1,6 @@
 # Sprint durumu
 
-Aktif: S07 (devam, 4/5) · Son güncelleme: 2026-10-17
+Aktif: S07 (devam, 5/5) · Son güncelleme: 2026-10-17
 Aktif sprint başlangıç commit'i: 62cdb97
 
 ## Taşınan işler
@@ -17,6 +17,7 @@ Aktif sprint başlangıç commit'i: 62cdb97
 - İstek ve AI yanıtı `lib/ai/schema.ts` zod şemalarıyla doğrulanır; AI yalnızca 9 kriteri puanlar, toplam puan ve seviye sunucuda hesaplanır.
 - Sonuç ekranı `sonuc.tsx` (param `uri`, `occasion`) isteği kendisi atar; halka `react-native-svg`, hareketi azalt Reanimated varsayılanıyla.
 - Dolap `expo-sqlite` `prova.db` / `outfits` (karar JSON + score/level sütunu, `user_version` migration); fotoğraf `Paths.document/outfits`, DB'de yalnızca dosya adı.
+- Tema tercihi `Appearance.setColorScheme` ile uygulanır, `expo-sqlite/kv-store` `theme` anahtarında saklanır; `useTheme` değişmez.
 
 ## Son sprintler
 - S06: dolap; SQLite kayıt, kalıcı fotoğraf, filtreli grid, detay, favori, onaylı silme · etiket sprint-06

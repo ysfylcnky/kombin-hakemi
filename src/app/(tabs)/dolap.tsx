@@ -6,6 +6,7 @@ import { ActivityIndicator, FlatList, Pressable, ScrollView, useWindowDimensions
 
 import { AppText } from '@/components/app-text';
 import { Button } from '@/components/button';
+import { Chip } from '@/components/chip';
 import { Screen } from '@/components/screen';
 import { useTheme } from '@/hooks/use-theme';
 import { type Level, levelLabels } from '@/lib/ai/schema';
@@ -13,27 +14,6 @@ import { filterOutfits, listOutfits, type Outfit, type OutfitFilter } from '@/li
 import { photoFile } from '@/lib/image';
 
 const noFilter: OutfitFilter = { favorites: false, level: null, sort: 'date' };
-
-function Chip({ label, selected, onPress }: { label: string; selected: boolean; onPress: () => void }) {
-  const { colors, space, radius } = useTheme();
-  return (
-    <Pressable
-      accessibilityRole="button"
-      accessibilityLabel={label}
-      accessibilityState={{ selected }}
-      onPress={onPress}
-      style={{
-        paddingVertical: space.md,
-        paddingHorizontal: space.lg,
-        borderRadius: radius.pill,
-        borderWidth: 1,
-        borderColor: selected ? colors.primary : colors.border,
-        backgroundColor: selected ? colors.primary : 'transparent',
-      }}>
-      <AppText style={{ color: selected ? colors.bg : colors.text }}>{label}</AppText>
-    </Pressable>
-  );
-}
 
 export default function DolapScreen() {
   const db = useSQLiteContext();
