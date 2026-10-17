@@ -1,19 +1,17 @@
 import { Image } from 'expo-image';
 import { router, useLocalSearchParams } from 'expo-router';
-import { useState } from 'react';
 import { ActivityIndicator, Alert } from 'react-native';
 
 import { AppText } from '@/components/app-text';
 import { Button } from '@/components/button';
 import { Screen } from '@/components/screen';
+import { useJudgeOutfit } from '@/hooks/use-judge-outfit';
 import { useTheme } from '@/hooks/use-theme';
-import { prepareImage } from '@/lib/image';
 
 export default function OnizlemeScreen() {
   const { uri } = useLocalSearchParams<{ uri?: string }>();
   const { colors, space } = useTheme();
-  const [sending, setSending] = useState(false);
-  const [failed, setFailed] = useState(false);
+  const { judge, loading, error } = useJudgeOutfit();
 
   if (!uri) {
     return (
@@ -26,17 +24,13 @@ export default function OnizlemeScreen() {
   }
 
   const send = async () => {
-    setSending(true);
-    setFailed(false);
-    try {
-      const image = await prepareImage(uri);
-      // Base64 is 4 chars per 3 bytes, so this is the actual JPEG size.
-      const kb = Math.round((image.base64.length * 3) / 4 / 1024);
-      Alert.alert('Fotoğraf hazır', `${kb} KB · Hakem bir sonraki sprintte bağlanacak.`);
-    } catch {
-      setFailed(true);
-    }
-    setSending(false);
+    // Fixed judge until the Hakem tab gets pickers; the alert stands in for the S04 result screen.
+    const verdict = await judge(uri, 'spiker', 'durust');
+    if (!verdict) return;
+    Alert.alert(
+      verdict.isOutfit ? `${verdict.score} · ${verdict.title}` : 'Kombin bulunamadı',
+      verdict.commentary,
+    );
   };
 
   return (
@@ -47,9 +41,9 @@ export default function OnizlemeScreen() {
         style={{ flex: 1 }}
         accessibilityLabel="Kombin fotoğrafın"
       />
-      {failed && <AppText muted>Fotoğraf hazırlanamadı. Bir daha dene.</AppText>}
-      {sending ? (
-        <ActivityIndicator color={colors.primary} accessibilityLabel="Hazırlanıyor" />
+      {error && <AppText muted>{error}</AppText>}
+      {loading ? (
+        <ActivityIndicator color={colors.primary} accessibilityLabel="Hakem düşünüyor" />
       ) : (
         <Button label="Hakeme gönder" onPress={send} />
       )}
