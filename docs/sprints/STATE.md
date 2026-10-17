@@ -13,7 +13,8 @@ Aktif sprint başlangıç commit'i: -
 - Kamera üstü katman temadan bağımsız `colors.dark` kullanır (önizleme hep koyu).
 - Görsel istemcide `prepareImage` ile 1024px JPEG'e küçültülüp base64 gönderilir.
 - AI sağlayıcı OpenAI Responses API (`gpt-6-luna`, strict JSON Schema); `OPENAI_API_KEY` yalnızca sunucuda, `AI_MOCK=1` anahtarsız.
-- Tek hakem: ciddi ve sert stil danışmanı; persona/sertlik seçimi yok.
+- Ürün adı **Prova**; futbol/hakem metaforu ve ironi yok. Slug, scheme ve kod içi `judge` adları kalır.
+- Tek değerlendirici: ciddi ve sert stil danışmanı; persona/sertlik seçimi yok.
 - İstek ve AI yanıtı `lib/ai/schema.ts` zod şemalarıyla doğrulanır; kart sunucuda puandan hesaplanır.
 - Sonuç ekranı `sonuc.tsx` (param `uri`) isteği kendisi atar; halka `react-native-svg`, hareketi azalt Reanimated varsayılanıyla.
 

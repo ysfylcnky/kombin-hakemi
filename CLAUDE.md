@@ -1,6 +1,6 @@
-# Kombin Hakemi
+# Prova
 
-Kombin fotoğrafını AI stil hakemine gönderen, puan + kart + sert ama yapıcı stil raporu veren Expo uygulaması.
+Kombin fotoğrafını AI stil danışmanına gönderen; moda ilkelerine dayalı kriter bazlı puan, seviye ve sert ama yapıcı stil raporu veren Expo uygulaması. Futbol/hakem metaforu ve ironi yok (repo adı `kombin-hakemi` tarihsel).
 Mobile Application Development final projesi. `AGENTS.md` Expo'nun kendi dosyasıdır, silinmez.
 
 ## Sadelik kuralları (her işte geçerli, diğer tüm kurallardan önce gelir)
@@ -22,7 +22,7 @@ Mevcut koddaki fazlalıklar için kullanıcı `/sadelestir` çalıştırır.
 |---|---|
 | `docs/sprints/STATE.md` | Aktif sprint ve kısa durum |
 | `docs/sprints/S0N.md` | Sprint görevleri ve kapanış notu |
-| `docs/sprints/ROADMAP.md` | 8 sprintlik tablo |
+| `docs/sprints/ROADMAP.md` | 9 sprintlik tablo |
 | `docs/PRODUCT.md` | Ürün, teknik yığın, mimari, ekranlar; önce Grep ile ilgili bölümü bul |
 
 ## Çalışma şekli
