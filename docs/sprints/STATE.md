@@ -1,7 +1,7 @@
 # Sprint durumu
 
-Aktif: yok · Sonraki: S02 · Son güncelleme: 2026-10-16
-Aktif sprint başlangıç commit'i: -
+Aktif: S02 (devam, 0/6) · Son güncelleme: 2026-10-17
+Aktif sprint başlangıç commit'i: c946066
 
 ## Taşınan işler
 -
