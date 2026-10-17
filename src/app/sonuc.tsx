@@ -17,7 +17,7 @@ import { Button } from '@/components/button';
 import { Screen } from '@/components/screen';
 import { useJudgeOutfit } from '@/hooks/use-judge-outfit';
 import { useTheme } from '@/hooks/use-theme';
-import type { Criteria, JudgeRequest, Verdict } from '@/lib/ai/schema';
+import type { Criteria, JudgeRequest, Level, Verdict } from '@/lib/ai/schema';
 
 const loadingMessages = [
   "Hakem VAR'a gitti…",
@@ -37,6 +37,22 @@ const criterionLabels: Record<keyof Criteria, string> = {
   texture: 'Doku ve kumaş',
   pattern: 'Desen kullanımı',
   grooming: 'Bakım ve özen',
+};
+
+const levelColor = {
+  weak: 'levelWeak',
+  developing: 'levelDeveloping',
+  good: 'levelGood',
+  veryGood: 'levelVeryGood',
+  flawless: 'levelFlawless',
+} as const;
+
+const levelLabel: Record<Level, string> = {
+  weak: 'Zayıf',
+  developing: 'Geliştirilmeli',
+  good: 'İyi',
+  veryGood: 'Çok iyi',
+  flawless: 'Kusursuz',
 };
 
 const countDuration = 900;
@@ -99,7 +115,7 @@ function ScoreRing({ score, level }: Pick<Verdict, 'score' | 'level'>) {
           cx={ringSize / 2}
           cy={ringSize / 2}
           r={ringRadius}
-          stroke={colors.primary}
+          stroke={colors[levelColor[level]]}
           strokeWidth={ringStroke}
           strokeLinecap="round"
           strokeDasharray={ringLength}
@@ -190,42 +206,53 @@ export default function SonucScreen() {
   return (
     <Screen style={{ paddingBottom: 0 }}>
       <ScrollView contentContainerStyle={{ gap: space.xl, paddingBottom: space.xl }}>
-        <View style={{ alignItems: 'center' }}>
+        <View style={{ alignItems: 'center', gap: space.sm }}>
           <ScoreRing score={verdict.score} level={verdict.level} />
+          <AppText variant="title" style={{ color: colors[levelColor[verdict.level]] }}>
+            {levelLabel[verdict.level]}
+          </AppText>
         </View>
         <View style={{ gap: space.sm }}>
           <AppText variant="display">{verdict.title}</AppText>
           <AppText>{verdict.commentary}</AppText>
         </View>
-        <View style={{ gap: space.md }}>
+        <View style={{ gap: space.lg }}>
           <AppText variant="title">Kriterler</AppText>
-          {(Object.keys(criterionLabels) as (keyof Criteria)[]).map((key) => (
-            <View
-              key={key}
-              accessible
-              accessibilityLabel={`${criterionLabels[key]}, 10 üzerinden ${verdict.criteria[key].score ?? 'puansız'}`}
-              style={{ gap: space.xs }}>
-              <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                <AppText>{criterionLabels[key]}</AppText>
-                <AppText>{verdict.criteria[key].score ?? '—'}</AppText>
-              </View>
+          {(Object.keys(criterionLabels) as (keyof Criteria)[]).map((key) => {
+            const { score, observation } = verdict.criteria[key];
+            return (
               <View
-                style={{
-                  height: space.sm,
-                  borderRadius: radius.pill,
-                  backgroundColor: colors.border,
-                }}>
-                <View
-                  style={{
-                    width: `${(verdict.criteria[key].score ?? 0) * 10}%`,
-                    height: '100%',
-                    borderRadius: radius.pill,
-                    backgroundColor: colors.primary,
-                  }}
-                />
+                key={key}
+                accessible
+                accessibilityLabel={`${criterionLabels[key]}, ${score === null ? 'puanlanmadı' : `10 üzerinden ${score}`}. ${observation}`}
+                style={{ gap: space.xs }}>
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                  <AppText>{criterionLabels[key]}</AppText>
+                  <AppText>{score ?? '—'}</AppText>
+                </View>
+                {score !== null && (
+                  <View
+                    style={{
+                      height: space.sm,
+                      borderRadius: radius.pill,
+                      backgroundColor: colors.border,
+                    }}>
+                    <View
+                      style={{
+                        width: `${score * 10}%`,
+                        height: '100%',
+                        borderRadius: radius.pill,
+                        backgroundColor: colors.primary,
+                      }}
+                    />
+                  </View>
+                )}
+                <AppText variant="caption" muted>
+                  {observation}
+                </AppText>
               </View>
-            </View>
-          ))}
+            );
+          })}
         </View>
         <ListSection title="Artılar" items={verdict.pros} marker="+" />
         <ListSection title="Eksikler" items={verdict.cons} marker="−" />
