@@ -1,13 +1,12 @@
 # Sprint durumu
 
-Aktif: S06 (görevler bitti, kapanış bekliyor) · Son güncelleme: 2026-10-17
-Aktif sprint başlangıç commit'i: 2d2412f
+Aktif: yok · Sonraki: S07 · Son güncelleme: 2026-10-17
+Aktif sprint başlangıç commit'i: -
 
 ## Taşınan işler
 -
 
 ## Kalıcı kararlar
-- Kod `src/` altında: ekranlar `src/app`, `@/*` → `src/*`; PRODUCT'taki `app/...` yolları buna göre okunur.
 - Stil yalnızca `useTheme()` (`colors`, `space`, `radius`, `typography`); font ağırlığı `fontFamily` ile; palet kum / koyu kahve / camel, pembe-bordo yok.
 - Hedef yalnızca iPhone + Android (Expo Go); web'e özel kod yazılmaz.
 - Kamera üstü katman temadan bağımsız `colors.dark` kullanır (önizleme hep koyu).
@@ -17,7 +16,8 @@ Aktif sprint başlangıç commit'i: 2d2412f
 - Tek değerlendirici: ciddi ve sert stil danışmanı; persona/sertlik seçimi yok.
 - İstek ve AI yanıtı `lib/ai/schema.ts` zod şemalarıyla doğrulanır; AI yalnızca 9 kriteri puanlar, toplam puan ve seviye sunucuda hesaplanır.
 - Sonuç ekranı `sonuc.tsx` (param `uri`, `occasion`) isteği kendisi atar; halka `react-native-svg`, hareketi azalt Reanimated varsayılanıyla.
+- Dolap `expo-sqlite` `prova.db` / `outfits` (karar JSON + score/level sütunu, `user_version` migration); fotoğraf `Paths.document/outfits`, DB'de yalnızca dosya adı.
 
 ## Son sprintler
+- S06: dolap; SQLite kayıt, kalıcı fotoğraf, filtreli grid, detay, favori, onaylı silme · etiket sprint-06
 - S05: Prova; 9 kriterli sunucu puanı, seviye, ortam seçimi, kriter dökümü, kum-camel tema · etiket sprint-05
-- S04: sonuç ekranı, puan halkası, hakem kartı, stil raporu, hata/tekrar dene · etiket sprint-04
