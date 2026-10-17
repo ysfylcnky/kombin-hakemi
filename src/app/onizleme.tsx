@@ -1,4 +1,5 @@
 import { Image } from 'expo-image';
+import { useNetworkState } from 'expo-network';
 import { router, useLocalSearchParams } from 'expo-router';
 import { useState } from 'react';
 import { Pressable, View } from 'react-native';
@@ -13,6 +14,7 @@ export default function OnizlemeScreen() {
   const { uri } = useLocalSearchParams<{ uri?: string }>();
   const { colors, space, radius } = useTheme();
   const [occasion, setOccasion] = useState<JudgeRequest['occasion']>('casual');
+  const offline = useNetworkState().isInternetReachable === false;
 
   if (!uri) {
     return (
@@ -65,10 +67,14 @@ export default function OnizlemeScreen() {
           })}
         </View>
       </View>
-      <Button
-        label="Değerlendir"
-        onPress={() => router.push({ pathname: '/sonuc', params: { uri, occasion } })}
-      />
+      {offline ? (
+        <AppText accessibilityRole="alert">İnternet bağlantın yok; değerlendirme için bağlan.</AppText>
+      ) : (
+        <Button
+          label="Değerlendir"
+          onPress={() => router.push({ pathname: '/sonuc', params: { uri, occasion } })}
+        />
+      )}
       <Button label="Tekrar çek" variant="ghost" onPress={() => router.back()} />
     </Screen>
   );
