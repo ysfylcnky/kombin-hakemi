@@ -1,5 +1,6 @@
 import { launchImageLibraryAsync } from 'expo-image-picker';
 import { router } from 'expo-router';
+import { Alert } from 'react-native';
 
 import { AppText } from '@/components/app-text';
 import { Button } from '@/components/button';
@@ -10,8 +11,12 @@ export default function HakemScreen() {
   const { space } = useTheme();
 
   const pick = async () => {
-    const result = await launchImageLibraryAsync({ mediaTypes: ['images'] });
-    if (!result.canceled) router.push({ pathname: '/onizleme', params: { uri: result.assets[0].uri } });
+    try {
+      const result = await launchImageLibraryAsync({ mediaTypes: ['images'] });
+      if (!result.canceled) router.push({ pathname: '/onizleme', params: { uri: result.assets[0].uri } });
+    } catch {
+      Alert.alert('Galeri açılamadı', 'Bir daha dene ya da kamerayla çek.');
+    }
   };
 
   return (
